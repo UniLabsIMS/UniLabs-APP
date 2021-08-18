@@ -5,6 +5,7 @@ abstract class Constants {
   // Official colors
 
   static final Color kPrimary = Colors.teal;
+  static final Color kDarkPrimary = Color(0xFF006666);
   static final Color kSecondary = Colors.pink;
   static final Color kScaffoldBackground = Colors.white;
   static final Color kAppBarBackground = Color(0xFFF5F5F5);
@@ -14,6 +15,7 @@ abstract class Constants {
 
   // Default large screen sizes
   static final double kMaxButtonWidth = 700;
+  static final double kMaxHomeDetailWidth = 1000;
 
   // API urls
 

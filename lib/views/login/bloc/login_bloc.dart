@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unilabs_app/classes/api/user.dart';
+import 'package:unilabs_app/root_bloc/root_bloc.dart';
+import 'package:unilabs_app/root_bloc/root_event.dart';
 
 import 'login_event.dart';
 import 'login_state.dart';
@@ -26,10 +30,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final authDetails = (event as SubmitEvent).auth;
         print('email: ${authDetails['email']}');
         print('password: ${authDetails['password']}');
-        // final user = await User.getFromAPI(authDetails['email'], authDetails['password']);
+        // final user = await User.loginToWithEmailPassword(
+        //     authDetails['email'], authDetails['password']);
         // if (user != null) {
-        //   rootBloc.add(LogInEmployeeEvent(authDetails, employee));
-        //   else yield state.clone(loading: false, loginFailed: true);
+        //   if (user.role == 'Lab Assistant')
+        //     rootBloc.add(LogInAndSaveTokenEvent(user));
+        //   else
+        //     yield state.clone(loading: false, loginFailed: true);
         // } else {
         //   yield state.clone(loading: false, loginFailed: true);
         // }
