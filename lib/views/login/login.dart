@@ -83,7 +83,8 @@ class LoginPage extends StatelessWidget {
                                   onTap: () {
                                     if (_formKey.currentState.validate()) {
                                       _formKey.currentState.save();
-                                      loginBloc.add(SubmitEvent(auth));
+                                      // loginBloc.add(SubmitEvent(auth));
+                                      Navigator.pushNamed(context, '/home');
                                     }
                                   },
                                 ),

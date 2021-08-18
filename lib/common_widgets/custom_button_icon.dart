@@ -39,7 +39,7 @@ class CustomIconButton extends StatelessWidget {
       ),
       child: Material(
         borderRadius: BorderRadius.circular(6),
-        color: Constants.kPrimary,
+        color: Constants.kDarkPrimary,
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(6),
