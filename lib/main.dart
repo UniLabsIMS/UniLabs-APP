@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unilabs_app/theme/theme.dart';
 import 'package:unilabs_app/views/home/bloc/home_provider.dart';
+import 'package:unilabs_app/views/item_search/bloc/item_search_provider.dart';
 import 'package:unilabs_app/views/login/bloc/login_provider.dart';
 
 void main() {
@@ -21,6 +22,7 @@ class UniLabsApp extends StatelessWidget {
         routes: {
           "/": (context) => LoginProvider(),
           "/home": (context) => HomeProvider(),
+          "/search": (context) => ItemSearchProvider(),
         });
   }
 }

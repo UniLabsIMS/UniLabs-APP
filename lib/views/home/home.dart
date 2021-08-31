@@ -46,7 +46,9 @@ class HomePage extends StatelessWidget {
                       MenuTile(
                         title: 'Search Item',
                         image: AssetImage('assets/images/search_item.jpg'),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, "/search");
+                        },
                       ),
                       MenuTile(
                         title: 'Handover Items',

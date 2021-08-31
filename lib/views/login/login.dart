@@ -84,7 +84,10 @@ class LoginPage extends StatelessWidget {
                                     if (_formKey.currentState.validate()) {
                                       _formKey.currentState.save();
                                       // loginBloc.add(SubmitEvent(auth));
-                                      Navigator.pushNamed(context, '/home');
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        '/home',
+                                      );
                                     }
                                   },
                                 ),

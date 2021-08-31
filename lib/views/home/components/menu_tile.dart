@@ -25,7 +25,7 @@ class MenuTile extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => onTap,
+          onTap: onTap,
           splashColor: Colors.grey.withOpacity(0.5),
           splashFactory: InkRipple.splashFactory,
           borderRadius: BorderRadius.circular(16),
