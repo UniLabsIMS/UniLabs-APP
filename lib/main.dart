@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:unilabs_app/test.dart';
+import 'package:unilabs_app/theme/theme.dart';
+import 'package:unilabs_app/views/home/bloc/home_provider.dart';
+import 'package:unilabs_app/views/item_search/bloc/item_search_provider.dart';
+import 'package:unilabs_app/views/login/bloc/login_provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(UniLabsApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+// This widget is the root of your application.
+class UniLabsApp extends StatelessWidget {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: TestScreen(
-        word: 'Test Screen',
-      ),
-    );
+        navigatorKey: _navigatorKey,
+        title: 'Uni Labs',
+        theme: buildThemeData(context),
+        initialRoute: '/',
+        routes: {
+          "/": (context) => LoginProvider(),
+          "/home": (context) => HomeProvider(),
+          "/search": (context) => ItemSearchProvider(),
+        });
   }
 }
