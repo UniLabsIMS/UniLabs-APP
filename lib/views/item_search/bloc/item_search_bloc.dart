@@ -23,16 +23,35 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
         String barcode = (event as SearchItemWithBarCodeEvent).barcode;
         try {
           //TODO: Request to get data from API and create item object
+          await Future.delayed(const Duration(seconds: 2), () {});
           yield state.clone(
             loading: false,
             searchError: false,
             item: new Item(),
           );
-          print("Hello");
         } catch (e) {
-          yield state.clone(loading: false, searchError: true);
+          yield state.clone(
+            loading: false,
+            searchError: true,
+          );
         }
         break;
+      case ClearItemEvent:
+        yield state.clearItem();
+        break;
+      case DeleteItemEvent:
+        yield state.clone(
+            loading: true, deleteError: false, deletionSuccess: false);
+        try {
+          //TODO: Request to get delete item to API
+          await Future.delayed(const Duration(seconds: 2), () {});
+          yield state.clearItem();
+          yield state.clone(
+              loading: false, deleteError: false, deletionSuccess: true);
+        } catch (e) {
+          yield state.clone(
+              loading: false, deleteError: true, deletionSuccess: false);
+        }
     }
   }
 

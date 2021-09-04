@@ -14,3 +14,7 @@ class SearchItemWithBarCodeEvent extends ItemSearchEvent {
 
   SearchItemWithBarCodeEvent({this.barcode});
 }
+
+class ClearItemEvent extends ItemSearchEvent {}
+
+class DeleteItemEvent extends ItemSearchEvent {}

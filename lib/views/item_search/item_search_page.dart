@@ -1,4 +1,3 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -27,34 +26,37 @@ class ItemSearchPage extends StatelessWidget {
           ),
           automaticallyImplyLeading: false,
         ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: BlocBuilder<ItemSearchBloc, ItemSearchState>(
-              builder: (context, state) {
-                return state.item == null
-                    ? TapToScanCard(
-                        text: "Tap to Scan Item",
-                        onTap: () async {
-                          try {
-                            String barcode =
-                                await FlutterBarcodeScanner.scanBarcode(
-                              "#009688",
-                              'Cancel',
-                              true,
-                              ScanMode.BARCODE,
-                            );
-                            if (barcode != "-1") {
-                              itemSearchBloc.add(
-                                SearchItemWithBarCodeEvent(barcode: barcode),
-                              );
-                            }
-                          } on PlatformException {}
-                        },
-                      )
-                    : ItemDetails();
-              },
-            ),
+        body: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: BlocBuilder<ItemSearchBloc, ItemSearchState>(
+            builder: (context, state) {
+              return (state.loading)
+                  ? Center(child: CircularProgressIndicator())
+                  : (state.item == null)
+                      ? Center(
+                          child: TapToScanCard(
+                            text: "Tap to Scan Item",
+                            onTap: () async {
+                              try {
+                                String barcode =
+                                    await FlutterBarcodeScanner.scanBarcode(
+                                  "#009688",
+                                  'Cancel',
+                                  true,
+                                  ScanMode.BARCODE,
+                                );
+                                if (barcode != "-1") {
+                                  itemSearchBloc.add(
+                                    SearchItemWithBarCodeEvent(
+                                        barcode: barcode),
+                                  );
+                                }
+                              } on PlatformException {}
+                            },
+                          ),
+                        )
+                      : ItemDetails();
+            },
           ),
         ),
       ),
