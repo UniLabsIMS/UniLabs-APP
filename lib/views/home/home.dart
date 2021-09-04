@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:unilabs_app/constants.dart';
 import 'package:unilabs_app/views/home/components/menu_tile.dart';
 import 'package:unilabs_app/views/home/components/profile_card.dart';
@@ -53,7 +52,9 @@ class HomePage extends StatelessWidget {
                       MenuTile(
                         title: 'Handover Items',
                         image: AssetImage('assets/images/handover_items.jpg'),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, "/handover");
+                        },
                       ),
                       MenuTile(
                         title: 'Temporary Handover',
