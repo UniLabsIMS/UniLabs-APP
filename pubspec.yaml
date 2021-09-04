@@ -37,6 +37,8 @@ dependencies:
   google_fonts: ^2.1.0
   font_awesome_flutter: ^9.1.0
   fluttertoast: ^8.0.8
+  dotted_border: ^2.0.0+1
+  flutter_styled_toast: ^2.0.0
 
 dev_dependencies:
   flutter_test:
