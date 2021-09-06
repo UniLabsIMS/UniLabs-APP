@@ -34,6 +34,31 @@ class HandoverView extends StatelessWidget {
         ),
         BlocListener<HandoverBloc, HandoverState>(
           listenWhen: (pre, current) =>
+              pre.studentIDScanError != current.studentIDScanError,
+          listener: (context, state) {
+            if (state.studentIDScanError)
+              showDialog(
+                context: context,
+                builder: (context) => new AlertDialog(
+                  title: ErrorDialogTitle(
+                    title: "OOPS! ID Scan Failed",
+                  ),
+                  content: AlertDialogBody(
+                    content:
+                        "Make sure the student is registered in the system.",
+                  ),
+                  actions: <Widget>[
+                    DialogButton(
+                        color: Constants.kErrorColor,
+                        text: "Ok",
+                        onPressed: () => Navigator.of(context).pop())
+                  ],
+                ),
+              );
+          },
+        ),
+        BlocListener<HandoverBloc, HandoverState>(
+          listenWhen: (pre, current) =>
               pre.itemScanSuccess != current.itemScanSuccess,
           listener: (context, state) {
             if (state.itemScanSuccess)
