@@ -12,6 +12,11 @@ abstract class Constants {
   static final Color kCanvasBackground = Colors.white;
   static final Color kDivider = Color(0xFF8E8E8E);
   static final Color kHintText = Color(0xFF8E8E8E);
+  static final Color kSuccessColor = Colors.green;
+  static final Color kErrorColor = Colors.red;
+  static final Color kWarningColor = Colors.yellow[700];
+
+  static final String kBarcodeScannerColor = "#009688";
 
   // Default large screen sizes
   static final double kMaxButtonWidth = 700;
