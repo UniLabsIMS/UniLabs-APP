@@ -1,91 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unilabs_app/common_widgets/tap_to_scan_card.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_bloc.dart';
-import 'package:unilabs_app/views/handover/bloc/handover_event.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_state.dart';
-import 'package:unilabs_app/views/handover/components/student_and_item_details.dart';
-
-import '../../constants.dart';
+import 'package:unilabs_app/views/handover/step_pages/intial_page.dart';
+import 'package:unilabs_app/views/handover/step_pages/item_scan_page.dart';
 
 class HandoverPage extends StatelessWidget {
   Widget build(BuildContext context) {
-    // ignore: close_sinks
-    final handoverBloc = BlocProvider.of<HandoverBloc>(context);
-    return WillPopScope(
-      onWillPop: () async {
-        bool confirmed = await _onWillPop(context);
-        if (confirmed) Navigator.pushReplacementNamed(context, "/home");
-        return;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Item Handover',
-            style: TextStyle(letterSpacing: 1.5),
-          ),
-          automaticallyImplyLeading: false,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: BlocBuilder<HandoverBloc, HandoverState>(
-            builder: (context, state) {
-              return (state.loading)
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : (state.student == null)
-                      ? Center(
-                          child: TapToScanCard(
-                            text: "Tap to Scan Student ID",
-                            onTap: () async {
-                              try {
-                                String barcode =
-                                    await FlutterBarcodeScanner.scanBarcode(
-                                  Constants.kBarcodeScannerColor,
-                                  'Cancel',
-                                  true,
-                                  ScanMode.BARCODE,
-                                );
-                                if (barcode != "-1") {
-                                  handoverBloc.add(
-                                    SearchStudentAndApprovedItemsEvent(
-                                      studentID: barcode,
-                                    ),
-                                  );
-                                }
-                              } on PlatformException {}
-                            },
-                          ),
-                        )
-                      : StudentAndItemDetails();
-            },
-          ),
-        ),
-      ),
-    );
+    return BlocBuilder<HandoverBloc, HandoverState>(
+        buildWhen: (previous, current) => previous.step != current.step,
+        builder: (context, state) {
+          return Container(
+            color: Colors.white,
+            child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                switchInCurve: Curves.ease,
+                switchOutCurve: Curves.ease,
+                transitionBuilder: (child, animation) {
+                  final offsetAnimation = Tween<Offset>(
+                          begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0))
+                      .animate(animation);
+                  return SlideTransition(
+                    position: offsetAnimation,
+                    child: child,
+                  );
+                },
+                layoutBuilder: (currentChild, previousChildren) => currentChild,
+                child: pageSwitcher(state.step)),
+          );
+        });
   }
 
-  Future<bool> _onWillPop(BuildContext context) async {
-    return (await showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Are you sure?'),
-            content: Text('Do you want to exit and return to home page'),
-            actions: <Widget>[
-              new TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: new Text('No'),
-              ),
-              new TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: new Text('Yes'),
-              ),
-            ],
-          ),
-        )) ??
-        false;
+  Widget pageSwitcher(HandoverProcessStep step) {
+    switch (step) {
+      case HandoverProcessStep.InitialStep:
+        return InitialPage();
+        break;
+      case HandoverProcessStep.ItemScanStep:
+        return ItemScanPage();
+        break;
+      default:
+        return InitialPage();
+        break;
+    }
   }
 }

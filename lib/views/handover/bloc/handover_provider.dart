@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unilabs_app/common_widgets/dialog_body.dart';
+import 'package:unilabs_app/common_widgets/dialog_button.dart';
+import 'package:unilabs_app/common_widgets/error_dialog_title.dart';
+import 'package:unilabs_app/common_widgets/success_dialog_title.dart';
+import 'package:unilabs_app/constants.dart';
 import 'package:unilabs_app/views/handover/handover_page.dart';
 
 import 'handover_bloc.dart';
@@ -25,6 +30,55 @@ class HandoverView extends StatelessWidget {
           listener: (context, state) {
             if (state.error?.isNotEmpty ?? false)
               print("ERROR: ${state.error}");
+          },
+        ),
+        BlocListener<HandoverBloc, HandoverState>(
+          listenWhen: (pre, current) =>
+              pre.itemScanSuccess != current.itemScanSuccess,
+          listener: (context, state) {
+            if (state.itemScanSuccess)
+              showDialog(
+                context: context,
+                builder: (context) => new AlertDialog(
+                  title: SuccessDialogTitle(
+                    title: "Item Handover Successful",
+                  ),
+                  content: AlertDialogBody(
+                    content: "Item marked as handed over to the student.",
+                  ),
+                  actions: <Widget>[
+                    DialogButton(
+                        color: Constants.kSuccessColor,
+                        text: "Ok",
+                        onPressed: () => Navigator.of(context).pop())
+                  ],
+                ),
+              );
+          },
+        ),
+        BlocListener<HandoverBloc, HandoverState>(
+          listenWhen: (pre, current) =>
+              pre.itemScanError != current.itemScanError,
+          listener: (context, state) {
+            if (state.itemScanError)
+              showDialog(
+                context: context,
+                builder: (context) => new AlertDialog(
+                  title: ErrorDialogTitle(
+                    title: "OOPS! Item Handover Failed",
+                  ),
+                  content: AlertDialogBody(
+                    content:
+                        "The system could not handover this item to student. Make sure the item is under the selected display item and the item is not marked as \"Damaged\"",
+                  ),
+                  actions: <Widget>[
+                    DialogButton(
+                        color: Constants.kErrorColor,
+                        text: "Ok",
+                        onPressed: () => Navigator.of(context).pop())
+                  ],
+                ),
+              );
           },
         ),
       ],

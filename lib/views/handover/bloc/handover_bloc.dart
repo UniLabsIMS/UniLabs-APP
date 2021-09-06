@@ -18,6 +18,11 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
         yield state.clone(error: "");
         yield state.clone(error: error);
         break;
+      case ChangeHandoverStepEvent:
+        HandoverProcessStep nextStep =
+            (event as ChangeHandoverStepEvent).nextStep;
+        yield state.clone(step: nextStep);
+        break;
       case SearchStudentAndApprovedItemsEvent:
         yield state.clone(
           loading: true,
@@ -38,23 +43,37 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
           yield state.clone(loading: false, studentIDScanError: true);
         }
         break;
-      case ScanAndHandoverItemEvent:
+      case HandoverScannedItemEvent:
         yield state.clone(
             loading: true, itemScanError: false, itemScanSuccess: false);
         String scannedItemID =
-            (event as ScanAndHandoverItemEvent).scannedItemID;
+            (event as HandoverScannedItemEvent).scannedItemID;
         try {
-          //  TODO: Request to API to search and handover the item
+          //  TODO: Request to API to search and handover the item and decrease requested quantity displayed by 1
           await Future.delayed(const Duration(seconds: 2), () {});
           yield state.clone(
-              loading: true, itemScanError: false, itemScanSuccess: true);
+            loading: false,
+            itemScanError: false,
+            itemScanSuccess: true,
+          );
         } catch (e) {
           yield state.clone(
-              loading: true, itemScanError: false, itemScanSuccess: false);
+            loading: false,
+            itemScanError: true,
+            itemScanSuccess: false,
+          );
         }
         break;
       case ClearStateEvent:
         yield state.clearState();
+        break;
+      case SelectDisplayItemToScanItemsEvent:
+        String displayItemId =
+            (event as SelectDisplayItemToScanItemsEvent).displayItemId;
+        state.clone(selectedDisplayItemID: displayItemId);
+        break;
+      case ClearSelectedDisplayItemEvent:
+        state.clone(selectedDisplayItemID: "");
         break;
     }
   }
