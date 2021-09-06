@@ -24,7 +24,7 @@ class NetworkAvatar extends StatelessWidget {
           backgroundColor: Constants.kSecondary,
           child: Image.network(
             src,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
             width: radius * 2,
             height: radius * 2,
             loadingBuilder: (context, child, loadingProgress) {

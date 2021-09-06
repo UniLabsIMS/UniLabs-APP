@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unilabs_app/common_widgets/tap_to_scan_card.dart';
+import 'package:unilabs_app/constants.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_bloc.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_event.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_state.dart';
@@ -40,7 +41,7 @@ class ItemSearchPage extends StatelessWidget {
                               try {
                                 String barcode =
                                     await FlutterBarcodeScanner.scanBarcode(
-                                  "#009688",
+                                  Constants.kBarcodeScannerColor,
                                   'Cancel',
                                   true,
                                   ScanMode.BARCODE,

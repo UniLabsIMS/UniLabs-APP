@@ -36,6 +36,7 @@ class TapToScanCard extends StatelessWidget {
               Center(
                 child: Text(
                   text,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 24,

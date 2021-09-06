@@ -215,13 +215,13 @@ class LoginPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(80),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.20),
+                  color: Constants.kPrimary.withOpacity(0.20),
                   blurRadius: 20,
                   offset: Offset(0, 3),
                 ),
               ],
             ),
-            child: Image.asset("assets/images/logo.jpg"),
+            child: Image.asset("assets/images/logo.png"),
           ),
         ),
         SizedBox(
