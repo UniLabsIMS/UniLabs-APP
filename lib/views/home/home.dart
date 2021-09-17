@@ -60,7 +60,12 @@ class HomePage extends StatelessWidget {
                         title: 'Temporary Handover',
                         image:
                             AssetImage('assets/images/temporary_handover.jfif'),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            "/temp-handover",
+                          );
+                        },
                       ),
                       MenuTile(
                         title: 'Returning Items',

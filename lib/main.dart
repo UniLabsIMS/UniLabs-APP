@@ -4,6 +4,7 @@ import 'package:unilabs_app/views/handover/bloc/handover_provider.dart';
 import 'package:unilabs_app/views/home/bloc/home_provider.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_provider.dart';
 import 'package:unilabs_app/views/login/bloc/login_provider.dart';
+import 'package:unilabs_app/views/temporary_handover/bloc/temporary_handover_provider.dart';
 
 void main() {
   runApp(UniLabsApp());
@@ -25,6 +26,7 @@ class UniLabsApp extends StatelessWidget {
           "/home": (context) => HomeProvider(),
           "/search": (context) => ItemSearchProvider(),
           "/handover": (context) => HandoverProvider(),
+          "/temp-handover": (context) => TemporaryHandoverProvider(),
         });
   }
 }
