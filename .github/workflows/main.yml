@@ -6,9 +6,9 @@ name: Flutter Push Verification
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main,]
   push:
-    branches: [ main, develop ]
+    branches: [ main,]
 
 
   # Allows you to run this workflow manually from the Actions tab
