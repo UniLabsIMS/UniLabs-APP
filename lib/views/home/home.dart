@@ -70,7 +70,12 @@ class HomePage extends StatelessWidget {
                       MenuTile(
                         title: 'Returning Items',
                         image: AssetImage('assets/images/accept_items.jfif'),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            "/item-return",
+                          );
+                        },
                       ),
                     ],
                   ),
