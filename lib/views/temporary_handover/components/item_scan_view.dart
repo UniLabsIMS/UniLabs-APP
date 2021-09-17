@@ -46,6 +46,7 @@ class ItemScanView extends StatelessWidget {
                   } on PlatformException {}
                 },
                 text: "Tap to Scan and Temporarily Handover Item to Student",
+                fontSize: 18,
               ),
               SizedBox(height: 90),
               CustomSmallButton(

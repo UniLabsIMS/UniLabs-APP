@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:unilabs_app/theme/theme.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_provider.dart';
 import 'package:unilabs_app/views/home/bloc/home_provider.dart';
+import 'package:unilabs_app/views/item_return/bloc/item_return_provider.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_provider.dart';
 import 'package:unilabs_app/views/login/bloc/login_provider.dart';
 import 'package:unilabs_app/views/temporary_handover/bloc/temporary_handover_provider.dart';
@@ -27,6 +28,7 @@ class UniLabsApp extends StatelessWidget {
           "/search": (context) => ItemSearchProvider(),
           "/handover": (context) => HandoverProvider(),
           "/temp-handover": (context) => TemporaryHandoverProvider(),
+          "/item-return": (context) => ItemReturnProvider(),
         });
   }
 }

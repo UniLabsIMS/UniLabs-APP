@@ -6,9 +6,11 @@ import 'package:unilabs_app/constants.dart';
 class TapToScanCard extends StatelessWidget {
   final Function onTap;
   final String text;
+  final double fontSize;
   TapToScanCard({
     @required this.onTap,
     @required this.text,
+    this.fontSize = 24,
   });
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class TapToScanCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 24,
+                    fontSize: fontSize,
                     color: Constants.kPrimary,
                   ),
                 ),
