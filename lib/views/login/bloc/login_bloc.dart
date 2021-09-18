@@ -11,7 +11,10 @@ import 'login_event.dart';
 import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc(BuildContext context) : super(LoginState.initialState);
+  final RootBloc rootBloc;
+  LoginBloc(BuildContext context)
+      : this.rootBloc = BlocProvider.of<RootBloc>(context),
+        super(LoginState.initialState);
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
@@ -28,19 +31,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       case SubmitEvent:
         yield state.clone(loading: true, loginFailed: false);
         final authDetails = (event as SubmitEvent).auth;
-        print('email: ${authDetails['email']}');
-        print('password: ${authDetails['password']}');
-        // final user = await User.loginToWithEmailPassword(
-        //     authDetails['email'], authDetails['password']);
-        // if (user != null) {
-        //   if (user.role == 'Lab Assistant')
-        //     rootBloc.add(LogInAndSaveTokenEvent(user));
-        //   else
-        //     yield state.clone(loading: false, loginFailed: true);
-        // } else {
-        //   yield state.clone(loading: false, loginFailed: true);
-        // }
-        yield state.clone(loading: false, loginFailed: false);
+        final user = await User.loginToWithEmailPassword(
+            authDetails['email'], authDetails['password']);
+        if (user != null) {
+          if (user.role == 'Lab_Assistant')
+            rootBloc.add(LogInAndSaveTokenEvent(user));
+          else
+            yield state.clone(loading: false, loginFailed: true);
+        } else {
+          yield state.clone(loading: false, loginFailed: true);
+        }
         break;
     }
   }

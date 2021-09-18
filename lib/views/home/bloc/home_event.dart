@@ -8,3 +8,5 @@ class ErrorEvent extends HomeEvent {
 
   ErrorEvent(this.error);
 }
+
+class LogoutEvent extends HomeEvent {}

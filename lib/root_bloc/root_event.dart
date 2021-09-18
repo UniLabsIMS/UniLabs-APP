@@ -24,7 +24,7 @@ class UpdateUserEvent extends RootEvent {
 }
 
 class ChangeLogInStateEvent extends RootEvent {
-  final LoginState state;
+  final LoginStateType state;
 
   ChangeLogInStateEvent(this.state);
 }
