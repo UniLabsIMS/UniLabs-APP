@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unilabs_app/classes/api/item.dart';
 import 'package:unilabs_app/common_widgets/custom_button_icon.dart';
 import 'package:unilabs_app/common_widgets/custom_small_button.dart';
 import 'package:unilabs_app/common_widgets/network_avatar.dart';
@@ -7,6 +8,8 @@ import 'package:unilabs_app/views/item_search/bloc/item_search_bloc.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_event.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_state.dart';
 import 'package:unilabs_app/views/item_search/components/state_bubble.dart';
+
+import '../../../constants.dart';
 
 class ItemDetails extends StatelessWidget {
   @override
@@ -21,20 +24,18 @@ class ItemDetails extends StatelessWidget {
             children: [
               NetworkAvatar(
                 radius: 60,
-                src:
-                    "https://www.hallmarknameplate.com/wp-content/uploads/2018/12/AdobeStock_4381957.jpeg",
+                src: state.item.parentDisplayItemImageURL.isNotEmpty
+                    ? state.item.parentDisplayItemImageURL
+                    : "https://www.hallmarknameplate.com/wp-content/uploads/2018/12/AdobeStock_4381957.jpeg",
                 err: "Img",
               ),
               Text(
-                "Item Name",
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 32,
-                ),
+                state.item.parentDisplayItemName.toUpperCase(),
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 32),
               ),
               SizedBox(height: 10),
               Text(
-                "Item ID",
+                state.item.id,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 24,
@@ -42,12 +43,12 @@ class ItemDetails extends StatelessWidget {
               ),
               SizedBox(height: 10),
               StateBubble(
-                stateName: "Available",
+                stateName: state.item.state,
                 color: Colors.yellow[800],
               ),
               SizedBox(height: 10),
               Text(
-                "Description here... Lorem ipsum dolor sit amet. Duis at velit justo. Pellentesque aliquet ante tellus, eu sollicitudin risus porttitor non. Fusce orci nibh, egestas a blandit ac, euismod a urna. Mauris ac magna et erat aliquam scelerisque. Donec lobortis libero vel maximus tincidunt. Morbi rhoncus quis turpis in consequat. Nullam non tortor sed ex aliquet sagittis. Morbi ut ex eu eros facilisis congue.",
+                state.item.parentDisplayItemDescription,
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: 18,
@@ -55,11 +56,23 @@ class ItemDetails extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 10),
-              CustomSmallButton(
-                color: Colors.grey,
-                text: "Toggle State",
-                onPressed: () {},
-              ),
+              (state.item.state == Item.AvailableState ||
+                      state.item.state == Item.DamagedState)
+                  ? CustomSmallButton(
+                      color: Constants.kSuccessColor,
+                      text: state.item.state == Item.AvailableState
+                          ? "Mark Item as Damaged"
+                          : "Mark Item available",
+                      onPressed: () {
+                        String newState =
+                            state.item.state == Item.AvailableState
+                                ? Item.DamagedState
+                                : Item.AvailableState;
+                        itemSearchBloc
+                            .add(ChangeItemStateEvent(newState: newState));
+                      },
+                    )
+                  : Container(),
               CustomSmallButton(
                 color: Colors.red,
                 text: "Delete Item",

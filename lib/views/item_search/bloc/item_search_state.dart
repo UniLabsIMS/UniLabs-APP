@@ -8,6 +8,8 @@ class ItemSearchState {
   final bool searchError;
   final bool deleteError;
   final bool deletionSuccess;
+  final bool stateChangeSuccess;
+  final bool stateChangeError;
   final Item item; //made a list to as we need to empty it
 
   ItemSearchState({
@@ -16,6 +18,8 @@ class ItemSearchState {
     @required this.searchError,
     @required this.deleteError,
     @required this.deletionSuccess,
+    @required this.stateChangeSuccess,
+    @required this.stateChangeError,
     @required this.item,
   });
 
@@ -25,6 +29,8 @@ class ItemSearchState {
         searchError: false,
         deleteError: false,
         deletionSuccess: false,
+        stateChangeSuccess: false,
+        stateChangeError: false,
         item: null,
       );
 
@@ -34,6 +40,8 @@ class ItemSearchState {
     bool searchError,
     bool deleteError,
     bool deletionSuccess,
+    bool stateChangeSuccess,
+    bool stateChangeError,
     String barcode,
     Item item,
   }) {
@@ -43,17 +51,21 @@ class ItemSearchState {
       searchError: searchError ?? this.searchError,
       deleteError: deleteError ?? this.deleteError,
       deletionSuccess: deletionSuccess ?? this.deletionSuccess,
+      stateChangeSuccess: stateChangeSuccess ?? this.stateChangeSuccess,
+      stateChangeError: stateChangeError ?? this.stateChangeError,
       item: item ?? this.item,
     );
   }
 
   ItemSearchState clearItem() {
     return ItemSearchState(
-      error: this.error,
-      loading: this.loading,
-      searchError: this.searchError,
-      deleteError: this.deleteError,
-      deletionSuccess: this.deletionSuccess,
+      error: '',
+      loading: false,
+      searchError: false,
+      deleteError: false,
+      deletionSuccess: false,
+      stateChangeSuccess: false,
+      stateChangeError: false,
       item: null,
     );
   }
