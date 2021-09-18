@@ -6,4 +6,8 @@ abstract class APIEndpoints {
   static final String kLoginURL = kBaseURL + '/auth/login/';
   static final String kRefreshAuthURL = kBaseURL + '/auth/refresh-auth/';
   static final String kLogoutURL = kBaseURL + '/auth/logout/';
+
+  static final String kItemSearchURL = kBaseURL + '/items/';
+  static final String kItemStateChangeURL = kBaseURL + "/items/update/";
+  static final String kItemDeleteURL = kBaseURL + "/items/delete/";
 }

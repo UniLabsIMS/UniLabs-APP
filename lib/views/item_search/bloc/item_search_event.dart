@@ -15,6 +15,12 @@ class SearchItemWithBarCodeEvent extends ItemSearchEvent {
   SearchItemWithBarCodeEvent({this.barcode});
 }
 
+class ChangeItemStateEvent extends ItemSearchEvent {
+  final String newState;
+
+  ChangeItemStateEvent({this.newState});
+}
+
 class ClearItemEvent extends ItemSearchEvent {}
 
 class DeleteItemEvent extends ItemSearchEvent {}

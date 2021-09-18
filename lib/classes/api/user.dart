@@ -36,7 +36,6 @@ class User {
         APIEndpoints.kLoginURL,
         data: {"email": email, "password": password},
       );
-      print(response.data);
       final data = response.data;
       return User(
         id: data['id'],
