@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:unilabs_app/classes/api/user.dart';
 
-enum LoginState { CHECKING, LOGIN, LOGOUT }
+enum LoginStateType { CHECKING, LOGIN, LOGOUT }
 
 @immutable
 class RootState {
   final String error;
   final User user;
-  final LoginState loginState;
+  final LoginStateType loginState;
   final bool checkStarted;
 
   RootState({
@@ -20,14 +20,14 @@ class RootState {
   static RootState get initialState => RootState(
         error: '',
         user: null,
-        loginState: LoginState.CHECKING,
+        loginState: LoginStateType.CHECKING,
         checkStarted: false,
       );
 
   RootState clone({
     String error,
     User user,
-    LoginState loginState,
+    LoginStateType loginState,
     bool checkStarted,
   }) {
     return RootState(

@@ -21,7 +21,4 @@ abstract class Constants {
   // Default large screen sizes
   static final double kMaxButtonWidth = 700;
   static final double kMaxHomeDetailWidth = 1000;
-
-  // API urls
-
 }

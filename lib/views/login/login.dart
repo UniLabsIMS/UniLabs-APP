@@ -79,15 +79,16 @@ class LoginPage extends StatelessWidget {
                                 firstCurve: Curves.ease,
                                 secondCurve: Curves.ease,
                                 firstChild: CustomIconButton(
+                                  loading: state.loading,
                                   text: 'Log In',
                                   onTap: () {
                                     if (_formKey.currentState.validate()) {
                                       _formKey.currentState.save();
-                                      // loginBloc.add(SubmitEvent(auth));
-                                      Navigator.pushReplacementNamed(
-                                        context,
-                                        '/home',
-                                      );
+                                      loginBloc.add(SubmitEvent(auth));
+                                      // Navigator.pushReplacementNamed(
+                                      //   context,
+                                      //   '/home',
+                                      // );
                                     }
                                   },
                                 ),
