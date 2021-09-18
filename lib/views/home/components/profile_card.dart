@@ -42,7 +42,7 @@ class ProfileCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           NetworkAvatar(
-            radius: 50,
+            radius: 40,
             removeBorder: true,
             src: imgSrc,
             err: firstName.isNotEmpty && lastName.isNotEmpty
@@ -50,30 +50,33 @@ class ProfileCard extends StatelessWidget {
                 : 'Img',
           ),
           SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 15,
-              ),
-              Text(
-                firstName + ' ' + lastName,
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Text(
-                'My Lab - ' + labName,
-                style: TextStyle(
-                    fontSize: 18,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  firstName + ' ' + lastName,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  labName,
+                  style: TextStyle(
+                    fontSize: 15,
                     fontWeight: FontWeight.w400,
-                    color: Colors.white),
-              ),
-            ],
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
           )
         ],
       ),

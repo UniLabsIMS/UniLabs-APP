@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unilabs_app/constants.dart';
+import 'package:unilabs_app/root_bloc/root_bloc.dart';
+import 'package:unilabs_app/root_bloc/root_state.dart';
 import 'package:unilabs_app/views/home/bloc/home_bloc.dart';
 import 'package:unilabs_app/views/home/bloc/home_event.dart';
 import 'package:unilabs_app/views/home/bloc/home_state.dart';
@@ -34,11 +36,26 @@ class HomePage extends StatelessWidget {
               : Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    ProfileCard(
-                      firstName: 'First',
-                      lastName: 'Last',
-                      labName: 'Lab Name',
-                      imgSrc: '',
+                    BlocBuilder<RootBloc, RootState>(
+                      builder: (context, state) {
+                        return ProfileCard(
+                          firstName: state.user.firstName != null &&
+                                  state.user.firstName.isNotEmpty
+                              ? state.user.firstName
+                              : 'First',
+                          lastName: state.user.lastName != null &&
+                                  state.user.lastName.isNotEmpty
+                              ? state.user.lastName
+                              : 'Last',
+                          labName: state.user.lab != null &&
+                                  state.user.lab.isNotEmpty
+                              ? state.user.lab
+                              : 'Lab Name',
+                          imgSrc: state.user.imageURL != null
+                              ? state.user.imageURL
+                              : '',
+                        );
+                      },
                     ),
                     Expanded(
                       child: Padding(
