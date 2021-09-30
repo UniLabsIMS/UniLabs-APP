@@ -7,22 +7,18 @@ ThemeData buildThemeData(BuildContext context) {
   return ThemeData(
     brightness: Brightness.light,
     primaryColor: Colors.teal,
-    accentColor: Colors.teal,
     primarySwatch: Colors.teal,
     appBarTheme: AppBarTheme(
       elevation: 2,
       shadowColor: Colors.black,
-      brightness: Brightness.light,
       centerTitle: true,
       color: Constants.kAppBarBackground,
-      textTheme: TextTheme(
-        headline6: GoogleFonts.rubik(
-          textStyle: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 26,
-              color: Colors.black,
-              letterSpacing: 1),
-        ),
+      titleTextStyle: GoogleFonts.rubik(
+        textStyle: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 26,
+            color: Colors.black,
+            letterSpacing: 1),
       ),
       iconTheme: IconThemeData(
         color: Colors.black,
