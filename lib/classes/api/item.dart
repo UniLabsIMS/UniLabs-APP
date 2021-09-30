@@ -58,6 +58,16 @@ class Item {
     await dio.delete(APIEndpoints.kItemDeleteURL + itemID);
   }
 
+  static Future<void> tempHandover(
+      {String itemID, String studentUUID, String token}) async {
+    String tokenAPI = "Token " + token;
+    dio.options.headers["Authorization"] = tokenAPI;
+    await dio.post(
+      APIEndpoints.kItemTempHandoverURL + itemID,
+      data: {"student_uuid": studentUUID},
+    );
+  }
+
   Item clone() {
     return Item(
       id: id,

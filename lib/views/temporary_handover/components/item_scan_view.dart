@@ -23,10 +23,14 @@ class ItemScanView extends StatelessWidget {
           return Column(
             children: [
               StudentDetailCard(
-                firstName: "First",
-                lastName: "Last",
-                studentID: "180594V",
-                department: "CSE",
+                firstName: state.student.firstName != ""
+                    ? state.student.firstName
+                    : "Name",
+                lastName: state.student.lastName != ""
+                    ? state.student.lastName
+                    : "Not Set",
+                studentID: state.student.indexNumber,
+                department: state.student.departmentCode,
               ),
               SizedBox(height: 50),
               TapToScanCard(

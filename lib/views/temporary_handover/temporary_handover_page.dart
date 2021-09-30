@@ -51,6 +51,7 @@ class TemporaryHandoverPage extends StatelessWidget {
                                   true,
                                   ScanMode.BARCODE,
                                 );
+                                print(barcode);
                                 if (barcode != "-1") {
                                   tempHandoverBloc.add(
                                       StudentIDScanEvent(scannedID: barcode));
