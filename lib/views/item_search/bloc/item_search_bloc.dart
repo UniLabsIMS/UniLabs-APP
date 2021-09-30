@@ -37,8 +37,7 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
             searchError: false,
             item: item,
           );
-        } on DioError catch (e) {
-          print(e.response.data);
+        } on DioError {
           yield state.clone(
             loading: false,
             searchError: true,
@@ -65,7 +64,7 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
             deleteError: false,
             deletionSuccess: true,
           );
-        } catch (e) {
+        } on DioError {
           yield state.clone(
             loading: false,
             deleteError: true,

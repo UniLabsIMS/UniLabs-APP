@@ -10,4 +10,9 @@ abstract class APIEndpoints {
   static final String kItemSearchURL = kBaseURL + '/items/';
   static final String kItemStateChangeURL = kBaseURL + "/items/update/";
   static final String kItemDeleteURL = kBaseURL + "/items/delete/";
+
+  static final String kStudentSearchURL = kBaseURL + '/students/';
+
+  static final String kItemTempHandoverURL =
+      kBaseURL + '/items/temporary-handover/';
 }

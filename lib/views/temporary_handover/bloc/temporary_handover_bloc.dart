@@ -1,16 +1,22 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unilabs_app/classes/api/item.dart';
 import 'package:unilabs_app/classes/api/student.dart';
+import 'package:unilabs_app/root_bloc/root_bloc.dart';
 
 import 'temporary_handover_event.dart';
 import 'temporary_handover_state.dart';
 
 class TemporaryHandoverBloc
     extends Bloc<TemporaryHandoverEvent, TemporaryHandoverState> {
+  final RootBloc rootBloc;
   TemporaryHandoverBloc(BuildContext context)
-      : super(TemporaryHandoverState.initialState);
+      : this.rootBloc = BlocProvider.of<RootBloc>(context),
+        super(TemporaryHandoverState.initialState);
 
   @override
   Stream<TemporaryHandoverState> mapEventToState(
@@ -29,15 +35,18 @@ class TemporaryHandoverBloc
         );
         final scannedID = (event as StudentIDScanEvent).scannedID;
         try {
-          //TODO: Request to API to search student
-          await Future.delayed(const Duration(seconds: 2));
+          Student student = await Student.getFromAPI(
+            studentID: scannedID,
+            token: rootBloc.state.user.token,
+          );
           yield state.clone(
             loading: false,
             studentSearchSuccess: true,
             studentSearchError: false,
-            student: new Student(),
+            student: student,
           );
-        } catch (e) {
+        } on DioError catch (e) {
+          print(e.response.data);
           yield state.clone(
             loading: false,
             studentSearchSuccess: false,
@@ -53,8 +62,11 @@ class TemporaryHandoverBloc
         );
         final scannedID = (event as ScanAndTempHandoverItemEvent).scannedID;
         try {
-          //TODO: Request to API to temporary handover
-          await Future.delayed(const Duration(seconds: 2), () {});
+          await Item.tempHandover(
+            itemID: scannedID,
+            studentUUID: state.student.id,
+            token: rootBloc.state.user.token,
+          );
           yield state.clone(
             loading: false,
             handoverSuccess: true,

@@ -95,7 +95,7 @@ class TemporaryHandoverView extends StatelessWidget {
                   ),
                   content: AlertDialogBody(
                     content:
-                        "The system could not temporally handover this item to student. Make sure the item is marked as \"Available\". You may search the item to see more details from home.",
+                        "The system could not temporally handover this item to student. Make sure the item is marked as \"Available\" and belongs to your lab. You may search the item to see more details about it.",
                   ),
                   actions: <Widget>[
                     DialogButton(
