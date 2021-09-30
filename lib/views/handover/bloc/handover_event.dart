@@ -36,4 +36,9 @@ class SelectDisplayItemToScanItemsEvent extends HandoverEvent {
   SelectDisplayItemToScanItemsEvent({this.displayItemId});
 }
 
+class UpdateDueDateEvent extends HandoverEvent {
+  final String dateString;
+  UpdateDueDateEvent({this.dateString});
+}
+
 class ClearSelectedDisplayItemEvent extends HandoverEvent {}

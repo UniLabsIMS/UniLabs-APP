@@ -2,14 +2,20 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unilabs_app/classes/api/borrowed_item.dart';
+import 'package:unilabs_app/classes/api/item.dart';
 import 'package:unilabs_app/classes/api/student.dart';
+import 'package:unilabs_app/root_bloc/root_bloc.dart';
 
 import 'item_return_event.dart';
 import 'item_return_state.dart';
 
 class ItemReturnBloc extends Bloc<ItemReturnEvent, ItemReturnState> {
-  ItemReturnBloc(BuildContext context) : super(ItemReturnState.initialState);
+  final RootBloc rootBloc;
+  ItemReturnBloc(BuildContext context)
+      : this.rootBloc = BlocProvider.of<RootBloc>(context),
+        super(ItemReturnState.initialState);
 
   @override
   Stream<ItemReturnState> mapEventToState(ItemReturnEvent event) async* {
@@ -27,13 +33,23 @@ class ItemReturnBloc extends Bloc<ItemReturnEvent, ItemReturnState> {
         );
         final scannedID = (event as StudentIDScanEvent).scannedID;
         try {
-          //TODO: Request to API to search student
-          await Future.delayed(const Duration(seconds: 2));
+          // Search for student
+          Student student = await Student.getFromAPI(
+            studentID: scannedID,
+            token: rootBloc.state.user.token,
+          );
+          // Get borrowed items by student
+          List<BorrowedItem> borrowedItems =
+              await BorrowedItem.getBorrowedItemsByStudent(
+            studentUUID: student.id,
+            token: rootBloc.state.user.token,
+          );
           yield state.clone(
             loading: false,
             studentSearchSuccess: true,
             studentSearchError: false,
-            student: new Student(),
+            student: student,
+            borrowedItems: borrowedItems,
           );
         } catch (e) {
           yield state.clone(
@@ -51,12 +67,15 @@ class ItemReturnBloc extends Bloc<ItemReturnEvent, ItemReturnState> {
         );
         final scannedID = (event as ScanAndAcceptItemEvent).scannedItemID;
         try {
-          //TODO: Request to API to approve item
-          await Future.delayed(const Duration(seconds: 2), () {});
-          // TODO: search for accepted items and remove it from borrowed items list
-          List<BorrowedItem> updatedBorrowedItems =
-              List.from(state.borrowedItems);
-          updatedBorrowedItems.removeAt(0);
+          // Request to API to approve item
+          await Item.acceptReturningItem(
+            itemID: scannedID,
+            token: rootBloc.state.user.token,
+          );
+          // search for accepted items and remove it from borrowed items list
+          List<BorrowedItem> updatedBorrowedItems = state.borrowedItems
+              .where((item) => item.id != scannedID)
+              .toList();
           yield state.clone(
             loading: false,
             itemAcceptanceSuccess: true,

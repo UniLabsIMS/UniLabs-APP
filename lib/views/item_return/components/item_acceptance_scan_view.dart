@@ -24,10 +24,17 @@ class ItemAcceptanceScanView extends StatelessWidget {
           return Column(
             children: [
               StudentDetailCard(
-                firstName: "First",
-                lastName: "Last",
-                studentID: "180594V",
-                department: "CSE",
+                imgSrc: state.student.imageURL != null
+                    ? state.student.imageURL
+                    : "",
+                firstName: state.student.firstName.isNotEmpty
+                    ? state.student.firstName
+                    : "Name",
+                lastName: state.student.lastName.isNotEmpty
+                    ? state.student.lastName
+                    : "Not Set",
+                studentID: state.student.indexNumber,
+                department: state.student.departmentCode,
               ),
               CustomSmallButton(
                   color: Constants.kDarkPrimary,
@@ -82,10 +89,11 @@ class ItemAcceptanceScanView extends StatelessWidget {
                           itemCount: state.borrowedItems.length,
                           itemBuilder: (context, index) {
                             return BorrowedItemCard(
-                              displayItemName: "Diaply Item Name",
-                              itemID: "132454uyZ",
-                              dueDate: "2021/09/27",
-                              state: "Borrowed",
+                              displayItemName:
+                                  state.borrowedItems[index].displayItemName,
+                              itemID: state.borrowedItems[index].id,
+                              dueDate: state.borrowedItems[index].dueDate,
+                              state: state.borrowedItems[index].state,
                             );
                           },
                         ),

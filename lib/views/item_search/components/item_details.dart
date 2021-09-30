@@ -51,19 +51,19 @@ class ItemDetails extends StatelessWidget {
                           fontSize: 24,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       StateBubble(
                         stateName: state.item.state,
-                        color: Colors.yellow[800],
+                        color: Colors.pink[800],
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Text(
                         state.item.parentDisplayItemDescription,
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 18,
                         ),
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.justify,
                       ),
                       SizedBox(height: 10),
                       (state.item.state == Item.AvailableState ||
@@ -83,13 +83,15 @@ class ItemDetails extends StatelessWidget {
                               },
                             )
                           : Container(),
-                      CustomSmallButton(
-                        color: Colors.red,
-                        text: "Delete Item",
-                        onPressed: () {
-                          itemSearchBloc.add(DeleteItemEvent());
-                        },
-                      ),
+                      (state.item.state == Item.AvailableState
+                          ? CustomSmallButton(
+                              color: Colors.red,
+                              text: "Delete Item",
+                              onPressed: () {
+                                itemSearchBloc.add(DeleteItemEvent());
+                              },
+                            )
+                          : SizedBox(height: 40)),
                       SizedBox(height: 20),
                       CustomIconButton(
                           text: "Scan Another",

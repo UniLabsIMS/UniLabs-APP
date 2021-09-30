@@ -64,6 +64,10 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
           );
         }
         break;
+      case UpdateDueDateEvent:
+        String date = (event as UpdateDueDateEvent).dateString;
+        yield state.clone(dueDate: date);
+        break;
       case ClearStateEvent:
         yield state.clearState();
         break;

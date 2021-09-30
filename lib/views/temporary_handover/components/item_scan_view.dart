@@ -23,10 +23,13 @@ class ItemScanView extends StatelessWidget {
           return Column(
             children: [
               StudentDetailCard(
-                firstName: state.student.firstName != ""
+                imgSrc: state.student.imageURL != null
+                    ? state.student.imageURL
+                    : "",
+                firstName: state.student.firstName.isNotEmpty
                     ? state.student.firstName
                     : "Name",
-                lastName: state.student.lastName != ""
+                lastName: state.student.lastName.isNotEmpty
                     ? state.student.lastName
                     : "Not Set",
                 studentID: state.student.indexNumber,

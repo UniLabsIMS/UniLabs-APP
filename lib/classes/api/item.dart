@@ -68,6 +68,14 @@ class Item {
     );
   }
 
+  static Future<void> acceptReturningItem({String itemID, String token}) async {
+    String tokenAPI = "Token " + token;
+    dio.options.headers["Authorization"] = tokenAPI;
+    await dio.put(
+      APIEndpoints.kReturningItemURL + itemID,
+    );
+  }
+
   Item clone() {
     return Item(
       id: id,

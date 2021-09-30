@@ -7,6 +7,7 @@ import 'package:unilabs_app/constants.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_bloc.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_event.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_state.dart';
+import 'package:unilabs_app/views/handover/components/date_picker.dart';
 
 class ItemScanPage extends StatelessWidget {
   @override
@@ -60,11 +61,16 @@ class ItemScanPage extends StatelessWidget {
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 36),
                           ),
+                          SizedBox(height: 10),
+                          DatePicker(
+                            selectedDate: state.dueDate,
+                          ),
                           SizedBox(height: 30),
                           Center(
                             child: TapToScanCard(
                               text:
                                   "Tap to Scan and Handover and Item Belonging to Requested Display Item.",
+                              fontSize: 20,
                               onTap: () async {
                                 try {
                                   String barcode =
