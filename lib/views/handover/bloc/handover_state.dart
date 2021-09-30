@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unilabs_app/classes/api/approved_display_item.dart';
 import 'package:unilabs_app/classes/api/student.dart';
+import 'package:unilabs_app/classes/utils.dart';
 
 enum HandoverProcessStep {
   InitialStep,
@@ -18,6 +19,7 @@ class HandoverState {
   final bool studentIDScanError;
   final bool itemScanError;
   final bool itemScanSuccess;
+  final String dueDate;
 
   HandoverState({
     @required this.error,
@@ -29,6 +31,7 @@ class HandoverState {
     @required this.studentIDScanError,
     @required this.itemScanError,
     @required this.itemScanSuccess,
+    @required this.dueDate,
   });
 
   static HandoverState get initialState => HandoverState(
@@ -41,6 +44,7 @@ class HandoverState {
         studentIDScanError: false,
         itemScanError: false,
         itemScanSuccess: false,
+        dueDate: Util.setInitialDueDate(),
       );
 
   HandoverState clone({
@@ -53,6 +57,7 @@ class HandoverState {
     bool studentIDScanError,
     bool itemScanError,
     bool itemScanSuccess,
+    String dueDate,
   }) {
     return HandoverState(
       error: error ?? this.error,
@@ -66,6 +71,7 @@ class HandoverState {
       studentIDScanError: studentIDScanError ?? this.studentIDScanError,
       itemScanError: itemScanError ?? this.itemScanError,
       itemScanSuccess: itemScanSuccess ?? this.itemScanSuccess,
+      dueDate: dueDate ?? this.dueDate,
     );
   }
 
@@ -80,6 +86,7 @@ class HandoverState {
       studentIDScanError: false,
       itemScanError: false,
       itemScanSuccess: false,
+      dueDate: Util.setInitialDueDate(),
     );
   }
 }
