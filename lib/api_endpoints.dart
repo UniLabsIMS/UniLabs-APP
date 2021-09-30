@@ -15,4 +15,8 @@ abstract class APIEndpoints {
 
   static final String kItemTempHandoverURL =
       kBaseURL + '/items/temporary-handover/';
+
+  static final String kBorrowedItemsOfStudentURL =
+      kBaseURL + '/items/borrowed/by-student/';
+  static final String kReturningItemURL = kBaseURL + '/items/return-item/';
 }

@@ -32,7 +32,7 @@ class ItemReturnState {
         itemAcceptanceSuccess: false,
         itemAcceptanceError: false,
         student: null,
-        borrowedItems: [BorrowedItem(), BorrowedItem()],
+        borrowedItems: [],
       );
 
   ItemReturnState clone({
@@ -67,7 +67,7 @@ class ItemReturnState {
       itemAcceptanceSuccess: false,
       itemAcceptanceError: false,
       student: null,
-      borrowedItems: [BorrowedItem(), BorrowedItem()],
+      borrowedItems: [],
     );
   }
 }
