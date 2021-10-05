@@ -1,16 +1,73 @@
-# unilabs_app
+# UniLabs Mobile :test_tube:
 
-UniLabs Flutter Application
+This is the mobile application for UniLabs Inventory Management System
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Setup Guide :raised_hands:
 
-A few resources to get you started if this is your first Flutter project:
+Make sure you have flutter installed.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```bash
+$ git clone https://github.com/UniLabsIMS/UniLabs-APP.git
+$ cd UniLabs-APP
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Intall dependencies
+
+```bash
+flutter pub get
+```
+
+To run the app, connect the mobile device or open the android emulator and run the following command
+
+```bash
+flutter run
+```
+
+
+
+## Starting a New Feature :hammer_and_wrench:
+
+
+Checkout main and pull changes
+
+```bash
+git checkout main
+git pull
+```
+
+checkut to a new branch
+```bash
+git checkout -b feature/<feature_name>
+```
+
+install missing dependancies 
+
+```bash
+flutter pub get
+```
+Start and run the app.
+
+```bash
+flutter run
+```
+
+#### Merging the current branch to master :hammer_and_wrench:
+
+Pull updates your local main branch
+```bash
+git checkout main
+git checkout pull
+```
+
+Update the required branch
+
+```bash
+git checkout <your_branch>
+git merge main
+```
+
+Start the app
+```bash
+flutter run
+```
