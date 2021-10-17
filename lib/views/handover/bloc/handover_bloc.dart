@@ -2,13 +2,20 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unilabs_app/classes/api/approved_display_item.dart';
+import 'package:unilabs_app/classes/api/item.dart';
 import 'package:unilabs_app/classes/api/student.dart';
+import 'package:unilabs_app/root_bloc/root_bloc.dart';
 
 import 'handover_event.dart';
 import 'handover_state.dart';
 
 class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
-  HandoverBloc(BuildContext context) : super(HandoverState.initialState);
+  final RootBloc rootBloc;
+  HandoverBloc(BuildContext context)
+      : this.rootBloc = BlocProvider.of<RootBloc>(context),
+        super(HandoverState.initialState);
 
   @override
   Stream<HandoverState> mapEventToState(HandoverEvent event) async* {
@@ -31,13 +38,22 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
         String studentID =
             (event as SearchStudentAndApprovedItemsEvent).studentID;
         try {
-          //  TODO: Request to API to search for approved Items
-          await Future.delayed(const Duration(seconds: 2), () {});
+          //  Get student and approved items from API
+          Student student = await Student.getFromAPI(
+            studentID: studentID,
+            token: rootBloc.state.user.token,
+          );
+          List<ApprovedDisplayItem> approvedDisplayItems =
+              await ApprovedDisplayItem.getApprovedItemsFromAPI(
+            labId: rootBloc.state.user.labId,
+            studentId: student.id,
+            token: rootBloc.state.user.token,
+          );
           yield state.clone(
             loading: false,
             studentIDScanError: false,
-            student: new Student(),
-            approvedDisplayItemsList: [],
+            student: student,
+            approvedDisplayItemsList: approvedDisplayItems,
           );
         } catch (e) {
           yield state.clone(loading: false, studentIDScanError: true);
@@ -49,18 +65,68 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
         String scannedItemID =
             (event as HandoverScannedItemEvent).scannedItemID;
         try {
-          //  TODO: Request to API to search and handover the item and decrease requested quantity displayed by 1
-          await Future.delayed(const Duration(seconds: 2), () {});
+          //  Request to API to search and handover the item and decrease requested quantity displayed by 1
+          await Item.approvedItemHandover(
+            itemID: scannedItemID,
+            approvalId: state.selectedApprovedDisplayItem.id,
+            dueDate: state.dueDate,
+            token: rootBloc.state.user.token,
+          );
+          List<ApprovedDisplayItem> itemLst =
+              List.from(state.approvedDisplayItemsList); //copy
+          ApprovedDisplayItem updatedSelectedApprovedItem;
+          for (int i = 0; i < itemLst.length; i++) {
+            ApprovedDisplayItem item = itemLst[i];
+            if (item.displayItemId ==
+                state.selectedApprovedDisplayItem.displayItemId) {
+              item.requestedItemCount = item.requestedItemCount - 1;
+              if (item.requestedItemCount == 0) {
+                itemLst.remove(item);
+              }
+              updatedSelectedApprovedItem = item;
+              break;
+            }
+          }
           yield state.clone(
+            approvedDisplayItemsList: itemLst,
+            selectedApprovedDisplayItem: updatedSelectedApprovedItem,
             loading: false,
             itemScanError: false,
             itemScanSuccess: true,
           );
+          break;
         } catch (e) {
           yield state.clone(
             loading: false,
             itemScanError: true,
             itemScanSuccess: false,
+          );
+        }
+        break;
+      case ClearAllApprovedDisplayItemsEvent:
+        yield state.clone(
+          loading: true,
+          clearAllApprovedSuccess: false,
+          clearAllApprovedError: false,
+        );
+        try {
+          print("ran api");
+          await ApprovedDisplayItem.clearAllApprovedItemsFromAPI(
+            labId: rootBloc.state.user.labId,
+            studentId: state.student.id,
+            token: rootBloc.state.user.token,
+          );
+          yield state.clone(
+            loading: false,
+            approvedDisplayItemsList: [],
+            clearAllApprovedSuccess: true,
+            clearAllApprovedError: false,
+          );
+        } catch (e) {
+          yield state.clone(
+            loading: false,
+            clearAllApprovedSuccess: false,
+            clearAllApprovedError: true,
           );
         }
         break;
@@ -72,12 +138,18 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
         yield state.clearState();
         break;
       case SelectDisplayItemToScanItemsEvent:
-        String displayItemId =
-            (event as SelectDisplayItemToScanItemsEvent).displayItemId;
-        state.clone(selectedDisplayItemID: displayItemId);
+        ApprovedDisplayItem approvedDspItem =
+            (event as SelectDisplayItemToScanItemsEvent).approvedDisplayItem;
+        yield state.clone(
+          selectedApprovedDisplayItem: approvedDspItem,
+        );
         break;
       case ClearSelectedDisplayItemEvent:
-        state.clone(selectedDisplayItemID: "");
+        state.clone(
+          selectedDisplayItemID: "",
+          selectedApprovedItemID: "",
+          selectedApprovedDisplayItem: null,
+        );
         break;
     }
   }

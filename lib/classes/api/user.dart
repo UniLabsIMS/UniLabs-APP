@@ -12,6 +12,7 @@ class User {
   String role;
   String department;
   String lab;
+  String labId;
   String contactNo;
   bool blocked;
 
@@ -25,6 +26,7 @@ class User {
     this.role,
     this.department,
     this.lab,
+    this.labId,
     this.contactNo,
     this.blocked,
   });
@@ -46,6 +48,7 @@ class User {
         imageURL: data['image'],
         role: data['role'],
         department: data['other_details']['department']['name'],
+        labId: data['other_details']['lab']['id'],
         lab: data['other_details']['lab']['name'],
         contactNo: data["contact_number"],
         blocked: data["blocked"] == "true",
@@ -75,6 +78,7 @@ class User {
         imageURL: data['image'],
         role: data['role'],
         department: data['other_details']['department']['name'],
+        labId: data['other_details']['lab']['id'],
         lab: data['other_details']['lab']['name'],
         contactNo: data["contact_number"],
         blocked: data["blocked"] == "true",

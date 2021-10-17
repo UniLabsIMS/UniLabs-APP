@@ -23,6 +23,7 @@ class CustomSmallButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           text,
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.w300,
             fontSize: 18,

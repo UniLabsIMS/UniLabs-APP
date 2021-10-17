@@ -31,7 +31,18 @@ class ItemScanPage extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
-          child: BlocBuilder<HandoverBloc, HandoverState>(
+          child: BlocConsumer<HandoverBloc, HandoverState>(
+            listenWhen: (previous, current) =>
+                previous.itemScanSuccess != current.itemScanSuccess,
+            listener: (context, state) {
+              if (state.selectedApprovedDisplayItem.requestedItemCount == 0) {
+                handoverBloc.add(
+                  ChangeHandoverStepEvent(
+                    nextStep: HandoverProcessStep.InitialStep,
+                  ),
+                );
+              }
+            },
             builder: (context, state) {
               return (state.loading)
                   ? Center(
@@ -42,7 +53,7 @@ class ItemScanPage extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            "Display Item Name",
+                            state.selectedApprovedDisplayItem.displayItemName,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 32),
@@ -56,7 +67,9 @@ class ItemScanPage extends StatelessWidget {
                           ),
                           SizedBox(height: 30),
                           Text(
-                            "04",
+                            state.selectedApprovedDisplayItem.requestedItemCount
+                                .toString()
+                                .padLeft(2, '0'),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 36),

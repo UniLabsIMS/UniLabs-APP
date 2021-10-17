@@ -43,8 +43,7 @@ class StudentDetailCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           NetworkAvatar(
-            radius: 35,
-            removeBorder: true,
+            radius: 30,
             src: imgSrc,
             err: firstName.isNotEmpty && lastName.isNotEmpty
                 ? firstName[0].toUpperCase() + lastName[0].toUpperCase()

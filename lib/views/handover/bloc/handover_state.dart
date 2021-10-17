@@ -14,11 +14,13 @@ class HandoverState {
   final HandoverProcessStep step;
   final bool loading;
   final Student student;
-  final String selectedDisplayItemID;
+  final ApprovedDisplayItem selectedApprovedDisplayItem;
   final List<ApprovedDisplayItem> approvedDisplayItemsList;
   final bool studentIDScanError;
   final bool itemScanError;
   final bool itemScanSuccess;
+  final bool clearAllApprovedSuccess;
+  final bool clearAllApprovedError;
   final String dueDate;
 
   HandoverState({
@@ -26,11 +28,13 @@ class HandoverState {
     @required this.step,
     @required this.loading,
     @required this.student,
-    @required this.selectedDisplayItemID,
+    @required this.selectedApprovedDisplayItem,
     @required this.approvedDisplayItemsList,
     @required this.studentIDScanError,
     @required this.itemScanError,
     @required this.itemScanSuccess,
+    @required this.clearAllApprovedSuccess,
+    @required this.clearAllApprovedError,
     @required this.dueDate,
   });
 
@@ -39,11 +43,13 @@ class HandoverState {
         step: HandoverProcessStep.InitialStep,
         loading: false,
         student: null,
-        selectedDisplayItemID: "",
+        selectedApprovedDisplayItem: null,
         approvedDisplayItemsList: [],
         studentIDScanError: false,
         itemScanError: false,
         itemScanSuccess: false,
+        clearAllApprovedSuccess: false,
+        clearAllApprovedError: false,
         dueDate: Util.setInitialDueDate(),
       );
 
@@ -53,10 +59,14 @@ class HandoverState {
     bool loading,
     Student student,
     String selectedDisplayItemID,
+    String selectedApprovedItemID,
+    ApprovedDisplayItem selectedApprovedDisplayItem,
     List<ApprovedDisplayItem> approvedDisplayItemsList,
     bool studentIDScanError,
     bool itemScanError,
     bool itemScanSuccess,
+    bool clearAllApprovedSuccess,
+    bool clearAllApprovedError,
     String dueDate,
   }) {
     return HandoverState(
@@ -64,13 +74,17 @@ class HandoverState {
       step: step ?? this.step,
       loading: loading ?? this.loading,
       student: student ?? this.student,
-      selectedDisplayItemID:
-          selectedDisplayItemID ?? this.selectedDisplayItemID,
+      selectedApprovedDisplayItem:
+          selectedApprovedDisplayItem ?? this.selectedApprovedDisplayItem,
       approvedDisplayItemsList:
           approvedDisplayItemsList ?? this.approvedDisplayItemsList,
       studentIDScanError: studentIDScanError ?? this.studentIDScanError,
       itemScanError: itemScanError ?? this.itemScanError,
       itemScanSuccess: itemScanSuccess ?? this.itemScanSuccess,
+      clearAllApprovedSuccess:
+          clearAllApprovedSuccess ?? this.clearAllApprovedSuccess,
+      clearAllApprovedError:
+          clearAllApprovedError ?? this.clearAllApprovedError,
       dueDate: dueDate ?? this.dueDate,
     );
   }
@@ -81,11 +95,13 @@ class HandoverState {
       step: HandoverProcessStep.InitialStep,
       loading: false,
       student: null,
-      selectedDisplayItemID: "",
+      selectedApprovedDisplayItem: null,
       approvedDisplayItemsList: [],
       studentIDScanError: false,
       itemScanError: false,
       itemScanSuccess: false,
+      clearAllApprovedSuccess: false,
+      clearAllApprovedError: false,
       dueDate: Util.setInitialDueDate(),
     );
   }

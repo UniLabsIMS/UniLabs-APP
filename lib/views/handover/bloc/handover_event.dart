@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unilabs_app/classes/api/approved_display_item.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_state.dart';
 
 @immutable
@@ -31,9 +32,11 @@ class HandoverScannedItemEvent extends HandoverEvent {
 class ClearStateEvent extends HandoverEvent {}
 
 class SelectDisplayItemToScanItemsEvent extends HandoverEvent {
-  final String displayItemId;
+  final ApprovedDisplayItem approvedDisplayItem;
 
-  SelectDisplayItemToScanItemsEvent({this.displayItemId});
+  SelectDisplayItemToScanItemsEvent({
+    this.approvedDisplayItem,
+  });
 }
 
 class UpdateDueDateEvent extends HandoverEvent {
@@ -42,3 +45,5 @@ class UpdateDueDateEvent extends HandoverEvent {
 }
 
 class ClearSelectedDisplayItemEvent extends HandoverEvent {}
+
+class ClearAllApprovedDisplayItemsEvent extends HandoverEvent {}
