@@ -45,3 +45,5 @@ class UpdateDueDateEvent extends HandoverEvent {
 }
 
 class ClearSelectedDisplayItemEvent extends HandoverEvent {}
+
+class ClearAllApprovedDisplayItemsEvent extends HandoverEvent {}

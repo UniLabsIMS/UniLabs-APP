@@ -46,4 +46,15 @@ class ApprovedDisplayItem {
     }
     return approvedDisplayItems;
   }
+
+  static Future<void> clearAllApprovedItemsFromAPI(
+      {String labId, String studentId, String token}) async {
+    String tokenAPI = "Token " + token;
+    dio.options.headers["Authorization"] = tokenAPI;
+    await dio.put(
+      APIEndpoints.kClearAllRemainingApprovedItemsURL,
+      data: {"student": studentId, "lab": labId},
+    );
+    return;
+  }
 }

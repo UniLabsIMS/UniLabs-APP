@@ -19,6 +19,8 @@ class HandoverState {
   final bool studentIDScanError;
   final bool itemScanError;
   final bool itemScanSuccess;
+  final bool clearAllApprovedSuccess;
+  final bool clearAllApprovedError;
   final String dueDate;
 
   HandoverState({
@@ -31,6 +33,8 @@ class HandoverState {
     @required this.studentIDScanError,
     @required this.itemScanError,
     @required this.itemScanSuccess,
+    @required this.clearAllApprovedSuccess,
+    @required this.clearAllApprovedError,
     @required this.dueDate,
   });
 
@@ -44,6 +48,8 @@ class HandoverState {
         studentIDScanError: false,
         itemScanError: false,
         itemScanSuccess: false,
+        clearAllApprovedSuccess: false,
+        clearAllApprovedError: false,
         dueDate: Util.setInitialDueDate(),
       );
 
@@ -59,6 +65,8 @@ class HandoverState {
     bool studentIDScanError,
     bool itemScanError,
     bool itemScanSuccess,
+    bool clearAllApprovedSuccess,
+    bool clearAllApprovedError,
     String dueDate,
   }) {
     return HandoverState(
@@ -73,6 +81,10 @@ class HandoverState {
       studentIDScanError: studentIDScanError ?? this.studentIDScanError,
       itemScanError: itemScanError ?? this.itemScanError,
       itemScanSuccess: itemScanSuccess ?? this.itemScanSuccess,
+      clearAllApprovedSuccess:
+          clearAllApprovedSuccess ?? this.clearAllApprovedSuccess,
+      clearAllApprovedError:
+          clearAllApprovedError ?? this.clearAllApprovedError,
       dueDate: dueDate ?? this.dueDate,
     );
   }
@@ -88,6 +100,8 @@ class HandoverState {
       studentIDScanError: false,
       itemScanError: false,
       itemScanSuccess: false,
+      clearAllApprovedSuccess: false,
+      clearAllApprovedError: false,
       dueDate: Util.setInitialDueDate(),
     );
   }

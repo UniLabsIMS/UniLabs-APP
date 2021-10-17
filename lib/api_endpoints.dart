@@ -25,4 +25,7 @@ abstract class APIEndpoints {
 
   static final String kItemHandoverURL =
       kBaseURL + '/items/handover/'; //concat item id
+
+  static final String kClearAllRemainingApprovedItemsURL =
+      kBaseURL + '/requests/clear-approved-request-items/';
 }

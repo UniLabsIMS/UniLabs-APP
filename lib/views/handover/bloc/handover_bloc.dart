@@ -103,6 +103,33 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
           );
         }
         break;
+      case ClearAllApprovedDisplayItemsEvent:
+        yield state.clone(
+          loading: true,
+          clearAllApprovedSuccess: false,
+          clearAllApprovedError: false,
+        );
+        try {
+          print("ran api");
+          await ApprovedDisplayItem.clearAllApprovedItemsFromAPI(
+            labId: rootBloc.state.user.labId,
+            studentId: state.student.id,
+            token: rootBloc.state.user.token,
+          );
+          yield state.clone(
+            loading: false,
+            approvedDisplayItemsList: [],
+            clearAllApprovedSuccess: true,
+            clearAllApprovedError: false,
+          );
+        } catch (e) {
+          yield state.clone(
+            loading: false,
+            clearAllApprovedSuccess: false,
+            clearAllApprovedError: true,
+          );
+        }
+        break;
       case UpdateDueDateEvent:
         String date = (event as UpdateDueDateEvent).dateString;
         yield state.clone(dueDate: date);
