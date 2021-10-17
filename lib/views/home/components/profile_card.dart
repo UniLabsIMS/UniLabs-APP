@@ -43,7 +43,6 @@ class ProfileCard extends StatelessWidget {
         children: [
           NetworkAvatar(
             radius: 40,
-            removeBorder: true,
             src: imgSrc,
             err: firstName.isNotEmpty && lastName.isNotEmpty
                 ? firstName[0].toUpperCase() + lastName[0].toUpperCase()

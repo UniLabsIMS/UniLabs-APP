@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:unilabs_app/constants.dart';
 
 class NetworkAvatar extends StatelessWidget {
   final double radius;
   final String src;
   final String err;
-  final bool removeBorder;
+  final double borderWidth;
 
   NetworkAvatar(
       {@required this.radius,
       @required this.src,
       @required this.err,
-      this.removeBorder = false});
+      this.borderWidth = 2});
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      radius: removeBorder ? radius : radius + 1,
-      backgroundColor: Colors.black12,
+      radius: (radius + borderWidth),
+      backgroundColor: Colors.black,
       child: ClipOval(
         child: CircleAvatar(
           radius: radius,
-          backgroundColor: Constants.kSecondary,
+          backgroundColor: Colors.white,
           child: Image.network(
             src,
             fit: BoxFit.fill,
@@ -44,7 +43,7 @@ class NetworkAvatar extends StatelessWidget {
               style: TextStyle(
                 fontSize: radius * 0.75,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
           ),

@@ -76,6 +76,16 @@ class Item {
     );
   }
 
+  static Future<void> approvedItemHandover(
+      {String itemID, String token, String approvalId, String dueDate}) async {
+    String tokenAPI = "Token " + token;
+    dio.options.headers["Authorization"] = tokenAPI;
+    await dio.post(
+      APIEndpoints.kItemHandoverURL + itemID,
+      data: {"request_item_id": approvalId, "due_date": dueDate},
+    );
+  }
+
   Item clone() {
     return Item(
       id: id,

@@ -14,7 +14,7 @@ class HandoverState {
   final HandoverProcessStep step;
   final bool loading;
   final Student student;
-  final String selectedDisplayItemID;
+  final ApprovedDisplayItem selectedApprovedDisplayItem;
   final List<ApprovedDisplayItem> approvedDisplayItemsList;
   final bool studentIDScanError;
   final bool itemScanError;
@@ -26,7 +26,7 @@ class HandoverState {
     @required this.step,
     @required this.loading,
     @required this.student,
-    @required this.selectedDisplayItemID,
+    @required this.selectedApprovedDisplayItem,
     @required this.approvedDisplayItemsList,
     @required this.studentIDScanError,
     @required this.itemScanError,
@@ -39,7 +39,7 @@ class HandoverState {
         step: HandoverProcessStep.InitialStep,
         loading: false,
         student: null,
-        selectedDisplayItemID: "",
+        selectedApprovedDisplayItem: null,
         approvedDisplayItemsList: [],
         studentIDScanError: false,
         itemScanError: false,
@@ -53,6 +53,8 @@ class HandoverState {
     bool loading,
     Student student,
     String selectedDisplayItemID,
+    String selectedApprovedItemID,
+    ApprovedDisplayItem selectedApprovedDisplayItem,
     List<ApprovedDisplayItem> approvedDisplayItemsList,
     bool studentIDScanError,
     bool itemScanError,
@@ -64,8 +66,8 @@ class HandoverState {
       step: step ?? this.step,
       loading: loading ?? this.loading,
       student: student ?? this.student,
-      selectedDisplayItemID:
-          selectedDisplayItemID ?? this.selectedDisplayItemID,
+      selectedApprovedDisplayItem:
+          selectedApprovedDisplayItem ?? this.selectedApprovedDisplayItem,
       approvedDisplayItemsList:
           approvedDisplayItemsList ?? this.approvedDisplayItemsList,
       studentIDScanError: studentIDScanError ?? this.studentIDScanError,
@@ -81,7 +83,7 @@ class HandoverState {
       step: HandoverProcessStep.InitialStep,
       loading: false,
       student: null,
-      selectedDisplayItemID: "",
+      selectedApprovedDisplayItem: null,
       approvedDisplayItemsList: [],
       studentIDScanError: false,
       itemScanError: false,

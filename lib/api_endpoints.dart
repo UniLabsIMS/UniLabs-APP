@@ -19,4 +19,10 @@ abstract class APIEndpoints {
   static final String kBorrowedItemsOfStudentURL =
       kBaseURL + '/items/borrowed/by-student/';
   static final String kReturningItemURL = kBaseURL + '/items/return-item/';
+
+  static final String kAllApprovedItemsURL =
+      kBaseURL + '/requests/approved-request-items/'; //concat lab_id/student_id
+
+  static final String kItemHandoverURL =
+      kBaseURL + '/items/handover/'; //concat item id
 }

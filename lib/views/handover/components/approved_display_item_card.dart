@@ -32,9 +32,11 @@ class ApprovedDisplayItemCard extends StatelessWidget {
           ],
         ),
         child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
           onTap: onTap,
           leading: NetworkAvatar(
-            radius: 30,
+            borderWidth: 1,
+            radius: 25,
             src: imgSrc,
             err: "Img",
           ),
@@ -43,7 +45,7 @@ class ApprovedDisplayItemCard extends StatelessWidget {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
           subtitle: Text(
-            "Quantity: " + requestedQuantity,
+            "Quantity: " + requestedQuantity.padLeft(2, '0'),
             style: TextStyle(fontSize: 16),
           ),
           trailing: Icon(FontAwesomeIcons.chevronRight),
