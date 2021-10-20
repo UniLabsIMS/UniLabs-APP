@@ -3,12 +3,15 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unilabs_app/classes/api/user.dart';
+import 'package:unilabs_app/classes/repository/user_repository.dart';
 import 'root_event.dart';
 import 'root_state.dart';
 
 class RootBloc extends Bloc<RootEvent, RootState> {
-  RootBloc(BuildContext context) : super(RootState.initialState) {
+  UserRepository userRepository;
+  RootBloc(BuildContext context, UserRepository userRepository)
+      : super(RootState.initialState) {
+    this.userRepository = userRepository;
     _initialize();
   }
 
@@ -18,7 +21,7 @@ class RootBloc extends Bloc<RootEvent, RootState> {
     String token = (prefs.getString('token') ?? '');
     if (token.isNotEmpty) {
       print('Token >>>>>>>>>>>>>>>>>>>>> $token');
-      final user = await User.getFromAPIWithToken(token);
+      final user = await userRepository.getFromAPIWithToken(token);
       if (user != null) {
         add(UpdateUserEvent(user));
         print('Logged In >>>>>>>>>>>>>>>>>>>>> ${user.id}');

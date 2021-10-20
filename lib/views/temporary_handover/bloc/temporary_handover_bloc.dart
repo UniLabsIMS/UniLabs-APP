@@ -4,8 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unilabs_app/classes/api/item.dart';
 import 'package:unilabs_app/classes/api/student.dart';
+import 'package:unilabs_app/classes/repository/item_repository.dart';
+import 'package:unilabs_app/classes/repository/student_repository.dart';
 import 'package:unilabs_app/root_bloc/root_bloc.dart';
 
 import 'temporary_handover_event.dart';
@@ -13,10 +14,17 @@ import 'temporary_handover_state.dart';
 
 class TemporaryHandoverBloc
     extends Bloc<TemporaryHandoverEvent, TemporaryHandoverState> {
-  final RootBloc rootBloc;
-  TemporaryHandoverBloc(BuildContext context)
-      : this.rootBloc = BlocProvider.of<RootBloc>(context),
-        super(TemporaryHandoverState.initialState);
+  RootBloc rootBloc;
+  StudentRepository studentRepository;
+  ItemRepository itemRepository;
+  Student studentObject = new Student();
+  TemporaryHandoverBloc(BuildContext context, RootBloc rootBloc,
+      StudentRepository studentRepository, ItemRepository itemRepository)
+      : super(TemporaryHandoverState.initialState) {
+    this.itemRepository = itemRepository;
+    this.studentRepository = studentRepository;
+    this.rootBloc = rootBloc;
+  }
 
   @override
   Stream<TemporaryHandoverState> mapEventToState(
@@ -35,7 +43,7 @@ class TemporaryHandoverBloc
         );
         final scannedID = (event as StudentIDScanEvent).scannedID;
         try {
-          Student student = await Student.getFromAPI(
+          Student student = await studentRepository.getFromAPI(
             studentID: scannedID,
             token: rootBloc.state.user.token,
           );
@@ -45,8 +53,7 @@ class TemporaryHandoverBloc
             studentSearchError: false,
             student: student,
           );
-        } on DioError catch (e) {
-          print(e.response.data);
+        } on DioError {
           yield state.clone(
             loading: false,
             studentSearchSuccess: false,
@@ -62,7 +69,7 @@ class TemporaryHandoverBloc
         );
         final scannedID = (event as ScanAndTempHandoverItemEvent).scannedID;
         try {
-          await Item.tempHandover(
+          await itemRepository.tempHandover(
             itemID: scannedID,
             studentUUID: state.student.id,
             token: rootBloc.state.user.token,

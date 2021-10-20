@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unilabs_app/classes/repository/item_repository.dart';
 import 'package:unilabs_app/common_widgets/dialog_body.dart';
 import 'package:unilabs_app/common_widgets/dialog_button.dart';
 import 'package:unilabs_app/common_widgets/error_dialog_title.dart';
 import 'package:unilabs_app/common_widgets/success_dialog_title.dart';
+import 'package:unilabs_app/root_bloc/root_bloc.dart';
 import '../../../constants.dart';
 import '../item_search_page.dart';
 
@@ -15,7 +17,11 @@ class ItemSearchProvider extends BlocProvider<ItemSearchBloc> {
     Key key,
   }) : super(
           key: key,
-          create: (context) => ItemSearchBloc(context),
+          create: (context) => ItemSearchBloc(
+            context,
+            BlocProvider.of<RootBloc>(context),
+            ItemRepository(),
+          ),
           child: ItemSearchView(),
         );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unilabs_app/classes/repository/user_repository.dart';
 import 'package:unilabs_app/root_bloc/root_bloc.dart';
 import 'package:unilabs_app/root_bloc/root_state.dart';
 import 'package:unilabs_app/views/login/login.dart';
@@ -12,7 +13,11 @@ class LoginProvider extends BlocProvider<LoginBloc> {
     Key key,
   }) : super(
           key: key,
-          create: (context) => LoginBloc(context),
+          create: (context) => LoginBloc(
+            context,
+            BlocProvider.of<RootBloc>(context),
+            UserRepository(),
+          ),
           child: LoginView(),
         );
 }
