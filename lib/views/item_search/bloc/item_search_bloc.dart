@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unilabs_app/classes/api/item.dart';
@@ -69,7 +68,7 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
             deleteError: false,
             deletionSuccess: true,
           );
-        } on DioError {
+        } catch (e) {
           yield state.clone(
             loading: false,
             deleteError: true,
@@ -99,7 +98,7 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
               stateChangeSuccess: true,
               item: item,
             );
-          } on DioError {
+          } catch (e) {
             yield state.clone(
               loading: false,
               stateChangeError: true,
