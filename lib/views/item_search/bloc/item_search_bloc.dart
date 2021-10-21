@@ -48,34 +48,7 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
           );
         }
         break;
-      case ClearItemEvent:
-        yield state.clearItem();
-        break;
-      case DeleteItemEvent:
-        yield state.clone(
-          loading: true,
-          deleteError: false,
-          deletionSuccess: false,
-        );
-        try {
-          await itemRepository.deleteItem(
-            itemID: state.item.id,
-            token: rootBloc.state.user.token,
-          );
-          yield state.clearItem();
-          yield state.clone(
-            loading: false,
-            deleteError: false,
-            deletionSuccess: true,
-          );
-        } catch (e) {
-          yield state.clone(
-            loading: false,
-            deleteError: true,
-            deletionSuccess: false,
-          );
-        }
-        break;
+
       case ChangeItemStateEvent:
         String newState = (event as ChangeItemStateEvent).newState;
         if (state.item.state != newState) {
@@ -106,6 +79,35 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
             );
           }
         }
+        break;
+      case DeleteItemEvent:
+        yield state.clone(
+          loading: true,
+          deleteError: false,
+          deletionSuccess: false,
+        );
+        try {
+          await itemRepository.deleteItem(
+            itemID: state.item.id,
+            token: rootBloc.state.user.token,
+          );
+          yield state.clearItem();
+          yield state.clone(
+            loading: false,
+            deleteError: false,
+            deletionSuccess: true,
+          );
+        } catch (e) {
+          yield state.clone(
+            loading: false,
+            deleteError: true,
+            deletionSuccess: false,
+          );
+        }
+        break;
+      case ClearItemEvent:
+        yield state.clearItem();
+        break;
     }
   }
 

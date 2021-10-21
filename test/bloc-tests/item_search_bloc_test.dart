@@ -10,8 +10,8 @@ import 'package:unilabs_app/root_bloc/root_state.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_bloc.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_event.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_state.dart';
-import 'test_data/item_search_reponse_data.dart';
-import 'test_data/root_user_data.dart';
+import 'test_data/item.dart';
+import 'test_data/logged_in_root_state.dart';
 
 class MockItemRepository extends Mock implements ItemRepository {}
 
@@ -37,8 +37,9 @@ void main() {
   });
 
   group('Item Search Bloc', () {
+    // 1. Item Search Event Success Test
     blocTest<ItemSearchBloc, ItemSearchState>(
-      'when search successful item field is set in state',
+      'when item search event successful, item should be set to \'item\' field of state',
       build: () {
         whenListen(
           rootBloc,
@@ -47,32 +48,31 @@ void main() {
         );
         when(
           () => mockItemRepository.getFromAPI(
-            itemID: itemSearchResponse.id,
+            itemID: testItem.id,
             token: loggedInRootState.user.token,
           ),
         ).thenAnswer(
-          (_) async => itemSearchResponse,
+          (_) async => testItem,
         );
 
         ItemSearchBloc bloc =
             ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
         return bloc;
       },
-      act: (bloc) =>
-          bloc.add(SearchItemWithBarCodeEvent(barcode: itemSearchResponse.id)),
+      act: (bloc) => bloc.add(SearchItemWithBarCodeEvent(barcode: testItem.id)),
       expect: () => [
         isA<ItemSearchState>()
             .having((state) => state.loading, 'loading', equals(true))
             .having((state) => state.searchError, 'searchError', equals(false)),
         isA<ItemSearchState>()
             .having((state) => state.loading, 'loading', equals(false))
-            .having((state) => state.item, 'item', equals(itemSearchResponse))
+            .having((state) => state.item, 'item', equals(testItem))
             .having((state) => state.searchError, 'searchError', equals(false)),
       ],
     );
-
+    // 2. Item Search Event Fail Test
     blocTest<ItemSearchBloc, ItemSearchState>(
-      'when search fails searchError field is set to true in state',
+      'when item search event fails, \'searchError\' field should be set to true in state',
       build: () {
         whenListen(
           rootBloc,
@@ -81,7 +81,7 @@ void main() {
         );
         when(
           () => mockItemRepository.getFromAPI(
-            itemID: itemSearchResponse.id,
+            itemID: testItem.id,
             token: loggedInRootState.user.token,
           ),
         ).thenAnswer(
@@ -95,8 +95,7 @@ void main() {
             ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
         return bloc;
       },
-      act: (bloc) =>
-          bloc.add(SearchItemWithBarCodeEvent(barcode: itemSearchResponse.id)),
+      act: (bloc) => bloc.add(SearchItemWithBarCodeEvent(barcode: testItem.id)),
       expect: () => [
         isA<ItemSearchState>()
             .having((state) => state.loading, 'loading', equals(true))
@@ -107,5 +106,246 @@ void main() {
             .having((state) => state.item, 'item', equals(null)),
       ],
     );
+
+    // 3. Change Item State Event Success
+    blocTest<ItemSearchBloc, ItemSearchState>(
+      'when change item state event successful, \'stateChangeSuccess\' should be set to true in state',
+      build: () {
+        whenListen(
+          rootBloc,
+          Stream.fromIterable([loggedInRootState]),
+          initialState: loggedInRootState,
+        );
+        when(
+          () => mockItemRepository.changeItemState(
+            itemID: testItem.id,
+            token: loggedInRootState.user.token,
+            state: "Borrowed",
+          ),
+        ).thenAnswer(
+          (_) async => null,
+        );
+
+        ItemSearchBloc bloc =
+            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+
+        bloc.emit(itemSearchCompleteState);
+
+        return bloc;
+      },
+      act: (bloc) => bloc.add(ChangeItemStateEvent(newState: "Borrowed")),
+      expect: () => [
+        isA<ItemSearchState>()
+            .having((state) => state.loading, 'loading', equals(true))
+            .having((state) => state.stateChangeError, 'stateChangeError',
+                equals(false))
+            .having((state) => state.stateChangeSuccess, 'stateChangeSuccess',
+                equals(false))
+            .having((state) => state.item, 'item', equals(testItem)),
+        isA<ItemSearchState>()
+            .having((state) => state.loading, 'loading', equals(false))
+            .having((state) => state.stateChangeError, 'stateChangeError',
+                equals(false))
+            .having((state) => state.stateChangeSuccess, 'stateChangeSuccess',
+                equals(true)),
+      ],
+    );
+
+    // 4. Change Item State Event Fail
+    blocTest<ItemSearchBloc, ItemSearchState>(
+      'when change item state event fail, \'stateChangeError\' should be set to true in state',
+      build: () {
+        whenListen(
+          rootBloc,
+          Stream.fromIterable([loggedInRootState]),
+          initialState: loggedInRootState,
+        );
+        when(
+          () => mockItemRepository.changeItemState(
+            itemID: testItem.id,
+            token: loggedInRootState.user.token,
+            state: "Borrowed",
+          ),
+        ).thenAnswer(
+          (_) async => throw DioError(
+            requestOptions: RequestOptions(path: "/"),
+            type: DioErrorType.connectTimeout,
+          ),
+        );
+
+        ItemSearchBloc bloc =
+            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+
+        bloc.emit(itemSearchCompleteState);
+
+        return bloc;
+      },
+      act: (bloc) => bloc.add(ChangeItemStateEvent(newState: "Borrowed")),
+      expect: () => [
+        isA<ItemSearchState>()
+            .having((state) => state.loading, 'loading', equals(true))
+            .having((state) => state.stateChangeError, 'stateChangeError',
+                equals(false))
+            .having((state) => state.stateChangeSuccess, 'stateChangeSuccess',
+                equals(false))
+            .having((state) => state.item, 'item', equals(testItem)),
+        isA<ItemSearchState>()
+            .having((state) => state.loading, 'loading', equals(false))
+            .having((state) => state.stateChangeSuccess, 'stateChangeSuccess',
+                equals(false))
+            .having((state) => state.stateChangeError, 'stateChangeError',
+                equals(true)),
+      ],
+    );
+
+    // 5. Delete Item Event Success
+    blocTest<ItemSearchBloc, ItemSearchState>(
+      'when delete item state event successful, \'deletionSuccess\' should be set to true in state and \'item\' should be cleared from state',
+      build: () {
+        whenListen(
+          rootBloc,
+          Stream.fromIterable([loggedInRootState]),
+          initialState: loggedInRootState,
+        );
+        when(
+          () => mockItemRepository.deleteItem(
+            itemID: testItem.id,
+            token: loggedInRootState.user.token,
+          ),
+        ).thenAnswer(
+          (_) async => null,
+        );
+
+        ItemSearchBloc bloc =
+            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+
+        bloc.emit(itemSearchCompleteState);
+
+        return bloc;
+      },
+      act: (bloc) => bloc.add(DeleteItemEvent()),
+      expect: () => [
+        isA<ItemSearchState>()
+            .having((state) => state.loading, 'loading', equals(true))
+            .having((state) => state.deleteError, 'deleteError', equals(false))
+            .having((state) => state.deletionSuccess, 'deletionSuccess',
+                equals(false))
+            .having((state) => state.item, 'item', equals(testItem)),
+        isA<ItemSearchState>()
+            .having((state) => state.item, 'item', equals(null)),
+        isA<ItemSearchState>()
+            .having((state) => state.loading, 'loading', equals(false))
+            .having((state) => state.deleteError, 'deleteError', equals(false))
+            .having((state) => state.deletionSuccess, 'deletionSuccess',
+                equals(true)),
+      ],
+    );
+
+    // 6. Delete Item Event Error
+    blocTest<ItemSearchBloc, ItemSearchState>(
+      'when delete item state event error, \'deletionError\' should be set to true in state',
+      build: () {
+        whenListen(
+          rootBloc,
+          Stream.fromIterable([loggedInRootState]),
+          initialState: loggedInRootState,
+        );
+        when(
+          () => mockItemRepository.deleteItem(
+            itemID: testItem.id,
+            token: loggedInRootState.user.token,
+          ),
+        ).thenAnswer(
+          (_) async => throw DioError(
+            requestOptions: RequestOptions(path: "/"),
+            type: DioErrorType.connectTimeout,
+          ),
+        );
+
+        ItemSearchBloc bloc =
+            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+
+        bloc.emit(itemSearchCompleteState);
+
+        return bloc;
+      },
+      act: (bloc) => bloc.add(DeleteItemEvent()),
+      expect: () => [
+        isA<ItemSearchState>()
+            .having((state) => state.loading, 'loading', equals(true))
+            .having((state) => state.deleteError, 'deleteError', equals(false))
+            .having((state) => state.deletionSuccess, 'deletionSuccess',
+                equals(false))
+            .having((state) => state.item, 'item', equals(testItem)),
+        isA<ItemSearchState>()
+            .having((state) => state.loading, 'loading', equals(false))
+            .having((state) => state.deleteError, 'deleteError', equals(true))
+            .having((state) => state.deletionSuccess, 'deletionSuccess',
+                equals(false)),
+      ],
+    );
+
+    // 7. Clear Item State Event
+    blocTest<ItemSearchBloc, ItemSearchState>(
+      'when clear item event, state should be set to initial state',
+      build: () {
+        whenListen(
+          rootBloc,
+          Stream.fromIterable([loggedInRootState]),
+          initialState: loggedInRootState,
+        );
+        ItemSearchBloc bloc =
+            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+        return bloc;
+      },
+      act: (bloc) => bloc.add(ClearItemEvent()),
+      expect: () => [
+        isA<ItemSearchState>()
+            .having((state) => state.error, 'error', equals(""))
+            .having((state) => state.loading, 'loading', equals(false))
+            .having((state) => state.searchError, 'searchError', equals(false))
+            .having((state) => state.deleteError, 'deleteError', equals(false))
+            .having((state) => state.deletionSuccess, 'deletionSuccess',
+                equals(false))
+            .having((state) => state.stateChangeSuccess, 'stateChangeSuccess',
+                equals(false))
+            .having((state) => state.stateChangeError, 'stateChangeError',
+                equals(false))
+            .having((state) => state.item, 'item', equals(null))
+      ],
+    );
+
+    //8. Error Event
+    blocTest<ItemSearchBloc, ItemSearchState>(
+      'when error event, state \'error\' should be set in state',
+      build: () {
+        whenListen(
+          rootBloc,
+          Stream.fromIterable([loggedInRootState]),
+          initialState: loggedInRootState,
+        );
+        ItemSearchBloc bloc =
+            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+        return bloc;
+      },
+      act: (bloc) => bloc.add(ErrorEvent("Error String")),
+      expect: () => [
+        isA<ItemSearchState>()
+            .having((state) => state.error, 'error', equals("")),
+        isA<ItemSearchState>()
+            .having((state) => state.error, 'error', equals("Error String")),
+      ],
+    );
   });
 }
+
+ItemSearchState itemSearchCompleteState = ItemSearchState(
+  error: "",
+  loading: false,
+  searchError: false,
+  deleteError: false,
+  deletionSuccess: false,
+  stateChangeSuccess: false,
+  stateChangeError: false,
+  item: testItem,
+);
