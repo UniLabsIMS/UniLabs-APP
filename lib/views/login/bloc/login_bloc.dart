@@ -38,10 +38,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final user = await userRepository.loginToWithEmailPassword(
             authDetails['email'], authDetails['password']);
         if (user != null) {
-          if (user.role == 'Lab_Assistant')
+          if (user.role == 'Lab_Assistant') {
             rootBloc.add(LogInAndSaveTokenEvent(user));
-          else
+          } else {
             yield state.clone(loading: false, loginFailed: true);
+          }
         } else {
           yield state.clone(loading: false, loginFailed: true);
         }

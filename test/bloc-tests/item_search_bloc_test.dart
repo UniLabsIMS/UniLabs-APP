@@ -26,23 +26,23 @@ class FakeRootState extends Fake implements RootState {}
 void main() {
   MockItemRepository mockItemRepository;
   MockBuildContext mockContext;
-  MockRootBloc rootBloc;
+  MockRootBloc mockRootBloc;
 
   setUp(() {
     mockContext = MockBuildContext();
     registerFallbackValue<RootEvent>(FakeRootEvent());
     registerFallbackValue<RootState>(FakeRootState());
-    rootBloc = MockRootBloc();
+    mockRootBloc = MockRootBloc();
     mockItemRepository = MockItemRepository();
   });
 
   group('Item Search Bloc', () {
     // 1. Item Search Event Success Test
     blocTest<ItemSearchBloc, ItemSearchState>(
-      'when item search event successful, item should be set to \'item\' field of state',
+      'when \'SearchItemWithBarCodeEvent\' successful, item should be set to \'item\' field of state',
       build: () {
         whenListen(
-          rootBloc,
+          mockRootBloc,
           Stream.fromIterable([loggedInRootState]),
           initialState: loggedInRootState,
         );
@@ -56,7 +56,7 @@ void main() {
         );
 
         ItemSearchBloc bloc =
-            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+            ItemSearchBloc(mockContext, mockRootBloc, mockItemRepository);
         return bloc;
       },
       act: (bloc) => bloc.add(SearchItemWithBarCodeEvent(barcode: testItem.id)),
@@ -72,10 +72,10 @@ void main() {
     );
     // 2. Item Search Event Fail Test
     blocTest<ItemSearchBloc, ItemSearchState>(
-      'when item search event fails, \'searchError\' field should be set to true in state',
+      'when \'SearchItemWithBarCodeEvent\' fails, \'searchError\' field should be set to true in state',
       build: () {
         whenListen(
-          rootBloc,
+          mockRootBloc,
           Stream.fromIterable([loggedInRootState]),
           initialState: loggedInRootState,
         );
@@ -92,7 +92,7 @@ void main() {
         );
 
         ItemSearchBloc bloc =
-            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+            ItemSearchBloc(mockContext, mockRootBloc, mockItemRepository);
         return bloc;
       },
       act: (bloc) => bloc.add(SearchItemWithBarCodeEvent(barcode: testItem.id)),
@@ -109,10 +109,10 @@ void main() {
 
     // 3. Change Item State Event Success
     blocTest<ItemSearchBloc, ItemSearchState>(
-      'when change item state event successful, \'stateChangeSuccess\' should be set to true in state',
+      'when \'ChangeItemStateEvent\' event successful, \'stateChangeSuccess\' should be set to true in state',
       build: () {
         whenListen(
-          rootBloc,
+          mockRootBloc,
           Stream.fromIterable([loggedInRootState]),
           initialState: loggedInRootState,
         );
@@ -127,7 +127,7 @@ void main() {
         );
 
         ItemSearchBloc bloc =
-            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+            ItemSearchBloc(mockContext, mockRootBloc, mockItemRepository);
 
         bloc.emit(itemSearchCompleteState);
 
@@ -153,10 +153,10 @@ void main() {
 
     // 4. Change Item State Event Fail
     blocTest<ItemSearchBloc, ItemSearchState>(
-      'when change item state event fail, \'stateChangeError\' should be set to true in state',
+      'when \'ChangeItemStateEvent\' event fail, \'stateChangeError\' should be set to true in state',
       build: () {
         whenListen(
-          rootBloc,
+          mockRootBloc,
           Stream.fromIterable([loggedInRootState]),
           initialState: loggedInRootState,
         );
@@ -174,7 +174,7 @@ void main() {
         );
 
         ItemSearchBloc bloc =
-            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+            ItemSearchBloc(mockContext, mockRootBloc, mockItemRepository);
 
         bloc.emit(itemSearchCompleteState);
 
@@ -200,10 +200,10 @@ void main() {
 
     // 5. Delete Item Event Success
     blocTest<ItemSearchBloc, ItemSearchState>(
-      'when delete item state event successful, \'deletionSuccess\' should be set to true in state and \'item\' should be cleared from state',
+      'when \'DeleteItemEvent\' event successful, \'deletionSuccess\' should be set to true in state and \'item\' should be cleared from state',
       build: () {
         whenListen(
-          rootBloc,
+          mockRootBloc,
           Stream.fromIterable([loggedInRootState]),
           initialState: loggedInRootState,
         );
@@ -217,7 +217,7 @@ void main() {
         );
 
         ItemSearchBloc bloc =
-            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+            ItemSearchBloc(mockContext, mockRootBloc, mockItemRepository);
 
         bloc.emit(itemSearchCompleteState);
 
@@ -243,10 +243,10 @@ void main() {
 
     // 6. Delete Item Event Error
     blocTest<ItemSearchBloc, ItemSearchState>(
-      'when delete item state event error, \'deletionError\' should be set to true in state',
+      'when \'DeleteItemEvent\' event error, \'deletionError\' should be set to true in state',
       build: () {
         whenListen(
-          rootBloc,
+          mockRootBloc,
           Stream.fromIterable([loggedInRootState]),
           initialState: loggedInRootState,
         );
@@ -263,7 +263,7 @@ void main() {
         );
 
         ItemSearchBloc bloc =
-            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+            ItemSearchBloc(mockContext, mockRootBloc, mockItemRepository);
 
         bloc.emit(itemSearchCompleteState);
 
@@ -287,15 +287,15 @@ void main() {
 
     // 7. Clear Item State Event
     blocTest<ItemSearchBloc, ItemSearchState>(
-      'when clear item event, state should be set to initial state',
+      'when \'ClearItemEvent\', state should be set to initial state',
       build: () {
         whenListen(
-          rootBloc,
+          mockRootBloc,
           Stream.fromIterable([loggedInRootState]),
           initialState: loggedInRootState,
         );
         ItemSearchBloc bloc =
-            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+            ItemSearchBloc(mockContext, mockRootBloc, mockItemRepository);
         return bloc;
       },
       act: (bloc) => bloc.add(ClearItemEvent()),
@@ -317,15 +317,15 @@ void main() {
 
     //8. Error Event
     blocTest<ItemSearchBloc, ItemSearchState>(
-      'when error event, state \'error\' should be set in state',
+      'when \'ErrorEvent\', state \'error\' should be set in state',
       build: () {
         whenListen(
-          rootBloc,
+          mockRootBloc,
           Stream.fromIterable([loggedInRootState]),
           initialState: loggedInRootState,
         );
         ItemSearchBloc bloc =
-            ItemSearchBloc(mockContext, rootBloc, mockItemRepository);
+            ItemSearchBloc(mockContext, mockRootBloc, mockItemRepository);
         return bloc;
       },
       act: (bloc) => bloc.add(ErrorEvent("Error String")),

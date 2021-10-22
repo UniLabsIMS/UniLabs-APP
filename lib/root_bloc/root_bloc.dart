@@ -54,26 +54,18 @@ class RootBloc extends Bloc<RootEvent, RootState> {
         yield state.clone(error: error);
         break;
 
+      case CheckStartedEvent:
+        yield state.clone(checkStarted: true);
+        break;
+
       case UpdateUserEvent:
         final user = (event as UpdateUserEvent).user;
         yield state.clone(user: user);
         break;
 
-      case CheckStartedEvent:
-        yield state.clone(checkStarted: true);
-        break;
-
       case ChangeLogInStateEvent:
         final stateLogin = (event as ChangeLogInStateEvent).state;
         yield state.clone(loginState: stateLogin);
-        break;
-
-      case LogOutEvent:
-        yield state.clone(loginState: LoginStateType.LOGOUT);
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', '');
-        yield state.clone(loginState: LoginStateType.LOGOUT);
-        print('User Logged Out >>>>>>>>>>>>>>>>>>>');
         break;
 
       case LogInAndSaveTokenEvent:
@@ -84,7 +76,14 @@ class RootBloc extends Bloc<RootEvent, RootState> {
           loginState: LoginStateType.LOGIN,
           user: user,
         );
-        print(state.loginState != LoginStateType.LOGOUT);
+        break;
+
+      case LogOutEvent:
+        yield state.clone(loginState: LoginStateType.CHECKING);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', '');
+        yield state.clone(loginState: LoginStateType.LOGOUT);
+        print('User Logged Out >>>>>>>>>>>>>>>>>>>');
         break;
     }
   }
