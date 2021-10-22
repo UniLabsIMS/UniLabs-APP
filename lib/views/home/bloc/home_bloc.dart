@@ -33,8 +33,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         try {
           await dio.post(APIEndpoints.kLogoutURL);
           rootBloc.add(LogOutEvent());
-        } on DioError catch (e) {
-          print(e.toString());
+        } on DioError {
           yield state.clone(loading: true, logoutError: true);
         }
         break;

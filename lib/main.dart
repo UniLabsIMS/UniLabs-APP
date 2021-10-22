@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unilabs_app/classes/repository/user_repository.dart';
 import 'package:unilabs_app/root_bloc/root_bloc.dart';
 import 'package:unilabs_app/theme/theme.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_provider.dart';
@@ -23,7 +24,7 @@ class UniLabsApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<RootBloc>(
-          create: (context) => RootBloc(context),
+          create: (context) => RootBloc(context, UserRepository()),
         ),
       ],
       child: MaterialApp(

@@ -4,18 +4,32 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unilabs_app/classes/api/approved_display_item.dart';
-import 'package:unilabs_app/classes/api/item.dart';
 import 'package:unilabs_app/classes/api/student.dart';
+import 'package:unilabs_app/classes/repository/approved_display_item_repository.dart';
+import 'package:unilabs_app/classes/repository/item_repository.dart';
+import 'package:unilabs_app/classes/repository/student_repository.dart';
 import 'package:unilabs_app/root_bloc/root_bloc.dart';
 
 import 'handover_event.dart';
 import 'handover_state.dart';
 
 class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
-  final RootBloc rootBloc;
-  HandoverBloc(BuildContext context)
-      : this.rootBloc = BlocProvider.of<RootBloc>(context),
-        super(HandoverState.initialState);
+  RootBloc rootBloc;
+  StudentRepository studentRepository;
+  ItemRepository itemRepository;
+  ApprovedDisplayItemRepository approvedDisplayItemRepository;
+  HandoverBloc(
+      BuildContext context,
+      RootBloc rootBloc,
+      StudentRepository studentRepository,
+      ItemRepository itemRepository,
+      ApprovedDisplayItemRepository approvedDisplayItemRepository)
+      : super(HandoverState.initialState) {
+    this.studentRepository = studentRepository;
+    this.itemRepository = itemRepository;
+    this.approvedDisplayItemRepository = approvedDisplayItemRepository;
+    this.rootBloc = rootBloc;
+  }
 
   @override
   Stream<HandoverState> mapEventToState(HandoverEvent event) async* {
@@ -39,12 +53,12 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
             (event as SearchStudentAndApprovedItemsEvent).studentID;
         try {
           //  Get student and approved items from API
-          Student student = await Student.getFromAPI(
+          Student student = await studentRepository.getFromAPI(
             studentID: studentID,
             token: rootBloc.state.user.token,
           );
           List<ApprovedDisplayItem> approvedDisplayItems =
-              await ApprovedDisplayItem.getApprovedItemsFromAPI(
+              await approvedDisplayItemRepository.getApprovedItemsFromAPI(
             labId: rootBloc.state.user.labId,
             studentId: student.id,
             token: rootBloc.state.user.token,
@@ -66,7 +80,7 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
             (event as HandoverScannedItemEvent).scannedItemID;
         try {
           //  Request to API to search and handover the item and decrease requested quantity displayed by 1
-          await Item.approvedItemHandover(
+          await itemRepository.approvedItemHandover(
             itemID: scannedItemID,
             approvalId: state.selectedApprovedDisplayItem.id,
             dueDate: state.dueDate,
@@ -110,8 +124,7 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
           clearAllApprovedError: false,
         );
         try {
-          print("ran api");
-          await ApprovedDisplayItem.clearAllApprovedItemsFromAPI(
+          await approvedDisplayItemRepository.clearAllApprovedItemsFromAPI(
             labId: rootBloc.state.user.labId,
             studentId: state.student.id,
             token: rootBloc.state.user.token,

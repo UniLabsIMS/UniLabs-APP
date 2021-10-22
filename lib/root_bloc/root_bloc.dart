@@ -3,12 +3,15 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unilabs_app/classes/api/user.dart';
+import 'package:unilabs_app/classes/repository/user_repository.dart';
 import 'root_event.dart';
 import 'root_state.dart';
 
 class RootBloc extends Bloc<RootEvent, RootState> {
-  RootBloc(BuildContext context) : super(RootState.initialState) {
+  UserRepository userRepository;
+  RootBloc(BuildContext context, UserRepository userRepository)
+      : super(RootState.initialState) {
+    this.userRepository = userRepository;
     _initialize();
   }
 
@@ -18,7 +21,7 @@ class RootBloc extends Bloc<RootEvent, RootState> {
     String token = (prefs.getString('token') ?? '');
     if (token.isNotEmpty) {
       print('Token >>>>>>>>>>>>>>>>>>>>> $token');
-      final user = await User.getFromAPIWithToken(token);
+      final user = await userRepository.getFromAPIWithToken(token);
       if (user != null) {
         add(UpdateUserEvent(user));
         print('Logged In >>>>>>>>>>>>>>>>>>>>> ${user.id}');
@@ -51,26 +54,18 @@ class RootBloc extends Bloc<RootEvent, RootState> {
         yield state.clone(error: error);
         break;
 
+      case CheckStartedEvent:
+        yield state.clone(checkStarted: true);
+        break;
+
       case UpdateUserEvent:
         final user = (event as UpdateUserEvent).user;
         yield state.clone(user: user);
         break;
 
-      case CheckStartedEvent:
-        yield state.clone(checkStarted: true);
-        break;
-
       case ChangeLogInStateEvent:
         final stateLogin = (event as ChangeLogInStateEvent).state;
         yield state.clone(loginState: stateLogin);
-        break;
-
-      case LogOutEvent:
-        yield state.clone(loginState: LoginStateType.LOGOUT);
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', '');
-        yield state.clone(loginState: LoginStateType.LOGOUT);
-        print('User Logged Out >>>>>>>>>>>>>>>>>>>');
         break;
 
       case LogInAndSaveTokenEvent:
@@ -81,7 +76,14 @@ class RootBloc extends Bloc<RootEvent, RootState> {
           loginState: LoginStateType.LOGIN,
           user: user,
         );
-        print(state.loginState != LoginStateType.LOGOUT);
+        break;
+
+      case LogOutEvent:
+        yield state.clone(loginState: LoginStateType.CHECKING);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', '');
+        yield state.clone(loginState: LoginStateType.LOGOUT);
+        print('User Logged Out >>>>>>>>>>>>>>>>>>>');
         break;
     }
   }

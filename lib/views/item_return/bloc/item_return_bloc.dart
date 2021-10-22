@@ -4,18 +4,33 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unilabs_app/classes/api/borrowed_item.dart';
-import 'package:unilabs_app/classes/api/item.dart';
 import 'package:unilabs_app/classes/api/student.dart';
+import 'package:unilabs_app/classes/repository/borrowed_item_repository.dart';
+import 'package:unilabs_app/classes/repository/item_repository.dart';
+import 'package:unilabs_app/classes/repository/student_repository.dart';
 import 'package:unilabs_app/root_bloc/root_bloc.dart';
 
 import 'item_return_event.dart';
 import 'item_return_state.dart';
 
 class ItemReturnBloc extends Bloc<ItemReturnEvent, ItemReturnState> {
-  final RootBloc rootBloc;
-  ItemReturnBloc(BuildContext context)
-      : this.rootBloc = BlocProvider.of<RootBloc>(context),
-        super(ItemReturnState.initialState);
+  RootBloc rootBloc;
+  StudentRepository studentRepository;
+  ItemRepository itemRepository;
+  BorrowedItemRepository borrowedItemRepository;
+  Student studentObject = new Student();
+  ItemReturnBloc(
+      BuildContext context,
+      RootBloc rootBloc,
+      StudentRepository studentRepository,
+      ItemRepository itemRepository,
+      BorrowedItemRepository borrowedItemRepository)
+      : super(ItemReturnState.initialState) {
+    this.itemRepository = itemRepository;
+    this.studentRepository = studentRepository;
+    this.borrowedItemRepository = borrowedItemRepository;
+    this.rootBloc = rootBloc;
+  }
 
   @override
   Stream<ItemReturnState> mapEventToState(ItemReturnEvent event) async* {
@@ -34,13 +49,13 @@ class ItemReturnBloc extends Bloc<ItemReturnEvent, ItemReturnState> {
         final scannedID = (event as StudentIDScanEvent).scannedID;
         try {
           // Search for student
-          Student student = await Student.getFromAPI(
+          Student student = await studentRepository.getFromAPI(
             studentID: scannedID,
             token: rootBloc.state.user.token,
           );
           // Get borrowed items by student
           List<BorrowedItem> borrowedItems =
-              await BorrowedItem.getBorrowedItemsByStudent(
+              await borrowedItemRepository.getBorrowedItemsByStudent(
             studentUUID: student.id,
             token: rootBloc.state.user.token,
           );
@@ -68,7 +83,7 @@ class ItemReturnBloc extends Bloc<ItemReturnEvent, ItemReturnState> {
         final scannedID = (event as ScanAndAcceptItemEvent).scannedItemID;
         try {
           // Request to API to approve item
-          await Item.acceptReturningItem(
+          await itemRepository.acceptReturningItem(
             itemID: scannedID,
             token: rootBloc.state.user.token,
           );

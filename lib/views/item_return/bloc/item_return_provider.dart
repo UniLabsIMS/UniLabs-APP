@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unilabs_app/classes/repository/borrowed_item_repository.dart';
+import 'package:unilabs_app/classes/repository/item_repository.dart';
+import 'package:unilabs_app/classes/repository/student_repository.dart';
 import 'package:unilabs_app/common_widgets/dialog_body.dart';
 import 'package:unilabs_app/common_widgets/dialog_button.dart';
 import 'package:unilabs_app/common_widgets/error_dialog_title.dart';
 import 'package:unilabs_app/common_widgets/success_dialog_title.dart';
+import 'package:unilabs_app/root_bloc/root_bloc.dart';
 import 'package:unilabs_app/views/item_return/returning_item_page.dart';
 
 import '../../../constants.dart';
@@ -15,7 +19,13 @@ class ItemReturnProvider extends BlocProvider<ItemReturnBloc> {
     Key key,
   }) : super(
           key: key,
-          create: (context) => ItemReturnBloc(context),
+          create: (context) => ItemReturnBloc(
+            context,
+            BlocProvider.of<RootBloc>(context),
+            StudentRepository(),
+            ItemRepository(),
+            BorrowedItemRepository(),
+          ),
           child: ItemReturnView(),
         );
 }

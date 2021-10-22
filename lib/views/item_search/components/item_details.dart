@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unilabs_app/classes/api/item.dart';
+import 'package:unilabs_app/classes/repository/item_repository.dart';
 import 'package:unilabs_app/common_widgets/custom_button_icon.dart';
 import 'package:unilabs_app/common_widgets/custom_small_button.dart';
 import 'package:unilabs_app/common_widgets/network_avatar.dart';
@@ -66,24 +66,25 @@ class ItemDetails extends StatelessWidget {
                         textAlign: TextAlign.justify,
                       ),
                       SizedBox(height: 10),
-                      (state.item.state == Item.AvailableState ||
-                              state.item.state == Item.DamagedState)
+                      (state.item.state == ItemRepository.AvailableState ||
+                              state.item.state == ItemRepository.DamagedState)
                           ? CustomSmallButton(
                               color: Constants.kSuccessColor,
-                              text: state.item.state == Item.AvailableState
+                              text: state.item.state ==
+                                      ItemRepository.AvailableState
                                   ? "Mark Item as Damaged"
                                   : "Mark Item available",
                               onPressed: () {
-                                String newState =
-                                    state.item.state == Item.AvailableState
-                                        ? Item.DamagedState
-                                        : Item.AvailableState;
+                                String newState = state.item.state ==
+                                        ItemRepository.AvailableState
+                                    ? ItemRepository.DamagedState
+                                    : ItemRepository.AvailableState;
                                 itemSearchBloc.add(
                                     ChangeItemStateEvent(newState: newState));
                               },
                             )
                           : Container(),
-                      (state.item.state == Item.AvailableState
+                      (state.item.state == ItemRepository.AvailableState
                           ? CustomSmallButton(
                               color: Colors.red,
                               text: "Delete Item",

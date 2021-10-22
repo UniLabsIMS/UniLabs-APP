@@ -1,20 +1,24 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unilabs_app/classes/api/item.dart';
+import 'package:unilabs_app/classes/repository/item_repository.dart';
 import 'package:unilabs_app/root_bloc/root_bloc.dart';
 
 import 'item_search_event.dart';
 import 'item_search_state.dart';
 
 class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
-  final RootBloc rootBloc;
-  ItemSearchBloc(BuildContext context)
-      : this.rootBloc = BlocProvider.of<RootBloc>(context),
-        super(ItemSearchState.initialState);
+  RootBloc rootBloc;
+  ItemRepository itemRepository;
+  ItemSearchBloc(
+      BuildContext context, RootBloc rootBloc, ItemRepository itemRepository)
+      : super(ItemSearchState.initialState) {
+    this.rootBloc = rootBloc;
+    this.itemRepository = itemRepository;
+  }
 
   @override
   Stream<ItemSearchState> mapEventToState(ItemSearchEvent event) async* {
@@ -28,7 +32,7 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
         yield state.clone(loading: true, searchError: false);
         String barcode = (event as SearchItemWithBarCodeEvent).barcode;
         try {
-          Item item = await Item.getFromAPI(
+          Item item = await itemRepository.getFromAPI(
             itemID: barcode,
             token: rootBloc.state.user.token,
           );
@@ -37,41 +41,14 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
             searchError: false,
             item: item,
           );
-        } on DioError {
+        } catch (e) {
           yield state.clone(
             loading: false,
             searchError: true,
           );
         }
         break;
-      case ClearItemEvent:
-        yield state.clearItem();
-        break;
-      case DeleteItemEvent:
-        yield state.clone(
-          loading: true,
-          deleteError: false,
-          deletionSuccess: false,
-        );
-        try {
-          await Item.deleteItem(
-            itemID: state.item.id,
-            token: rootBloc.state.user.token,
-          );
-          yield state.clearItem();
-          yield state.clone(
-            loading: false,
-            deleteError: false,
-            deletionSuccess: true,
-          );
-        } on DioError {
-          yield state.clone(
-            loading: false,
-            deleteError: true,
-            deletionSuccess: false,
-          );
-        }
-        break;
+
       case ChangeItemStateEvent:
         String newState = (event as ChangeItemStateEvent).newState;
         if (state.item.state != newState) {
@@ -81,7 +58,7 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
             stateChangeSuccess: false,
           );
           try {
-            await Item.changeItemState(
+            await itemRepository.changeItemState(
               itemID: state.item.id,
               state: newState,
               token: rootBloc.state.user.token,
@@ -94,8 +71,7 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
               stateChangeSuccess: true,
               item: item,
             );
-          } on DioError catch (e) {
-            print(e.response.data);
+          } catch (e) {
             yield state.clone(
               loading: false,
               stateChangeError: true,
@@ -103,6 +79,35 @@ class ItemSearchBloc extends Bloc<ItemSearchEvent, ItemSearchState> {
             );
           }
         }
+        break;
+      case DeleteItemEvent:
+        yield state.clone(
+          loading: true,
+          deleteError: false,
+          deletionSuccess: false,
+        );
+        try {
+          await itemRepository.deleteItem(
+            itemID: state.item.id,
+            token: rootBloc.state.user.token,
+          );
+          yield state.clearItem();
+          yield state.clone(
+            loading: false,
+            deleteError: false,
+            deletionSuccess: true,
+          );
+        } catch (e) {
+          yield state.clone(
+            loading: false,
+            deleteError: true,
+            deletionSuccess: false,
+          );
+        }
+        break;
+      case ClearItemEvent:
+        yield state.clearItem();
+        break;
     }
   }
 

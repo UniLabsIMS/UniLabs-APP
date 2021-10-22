@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unilabs_app/classes/api/user.dart';
+import 'package:unilabs_app/classes/repository/user_repository.dart';
 import 'package:unilabs_app/root_bloc/root_bloc.dart';
 import 'package:unilabs_app/root_bloc/root_event.dart';
 
@@ -11,10 +11,14 @@ import 'login_event.dart';
 import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final RootBloc rootBloc;
-  LoginBloc(BuildContext context)
-      : this.rootBloc = BlocProvider.of<RootBloc>(context),
-        super(LoginState.initialState);
+  RootBloc rootBloc;
+  UserRepository userRepository;
+  LoginBloc(
+      BuildContext context, RootBloc rootBloc, UserRepository userRepository)
+      : super(LoginState.initialState) {
+    this.rootBloc = rootBloc;
+    this.userRepository = userRepository;
+  }
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
@@ -31,13 +35,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       case SubmitEvent:
         yield state.clone(loading: true, loginFailed: false);
         final authDetails = (event as SubmitEvent).auth;
-        final user = await User.loginToWithEmailPassword(
+        final user = await userRepository.loginToWithEmailPassword(
             authDetails['email'], authDetails['password']);
         if (user != null) {
-          if (user.role == 'Lab_Assistant')
+          if (user.role == 'Lab_Assistant') {
             rootBloc.add(LogInAndSaveTokenEvent(user));
-          else
+          } else {
             yield state.clone(loading: false, loginFailed: true);
+          }
         } else {
           yield state.clone(loading: false, loginFailed: true);
         }
