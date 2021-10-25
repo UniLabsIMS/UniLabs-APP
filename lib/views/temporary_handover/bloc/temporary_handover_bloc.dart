@@ -17,7 +17,6 @@ class TemporaryHandoverBloc
   RootBloc rootBloc;
   StudentRepository studentRepository;
   ItemRepository itemRepository;
-  Student studentObject = new Student();
   TemporaryHandoverBloc(BuildContext context, RootBloc rootBloc,
       StudentRepository studentRepository, ItemRepository itemRepository)
       : super(TemporaryHandoverState.initialState) {
