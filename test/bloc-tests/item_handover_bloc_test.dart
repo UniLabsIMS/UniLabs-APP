@@ -48,7 +48,7 @@ void main() {
     mockApprovedDisplayItemRepository = MockApprovedDisplayItemRepository();
   });
 
-  group('Temporary Handover Bloc', () {
+  group('Handover Bloc', () {
     blocTest<HandoverBloc, HandoverState>(
       'when \'SearchStudentAndApprovedItemsEvent\' successful, student object should be set to \'student\' field of state and \'approvedDisplayItemsList\' must be filled.',
       build: () {
