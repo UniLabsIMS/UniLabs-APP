@@ -57,8 +57,15 @@ class UserRepository {
         blocked: data["blocked"] == "true",
       );
     } on DioError catch (e) {
-      print(e.toString());
+      print(e);
       return null;
     }
+  }
+
+  Future<void> logOut({String token}) async {
+    Dio dio = Dio();
+    String tokenAPI = "Token " + token;
+    dio.options.headers["Authorization"] = tokenAPI;
+    await dio.post(APIEndpoints.kLogoutURL);
   }
 }

@@ -89,6 +89,23 @@ class HandoverState {
     );
   }
 
+  HandoverState clearSelectedDisplayItemState() {
+    return HandoverState(
+      error: this.error,
+      step: this.step,
+      loading: this.loading,
+      student: this.student,
+      selectedApprovedDisplayItem: null,
+      approvedDisplayItemsList: this.approvedDisplayItemsList,
+      studentIDScanError: this.studentIDScanError,
+      itemScanError: this.itemScanError,
+      itemScanSuccess: this.itemScanSuccess,
+      clearAllApprovedSuccess: this.clearAllApprovedSuccess,
+      clearAllApprovedError: this.clearAllApprovedError,
+      dueDate: this.dueDate,
+    );
+  }
+
   HandoverState clearState() {
     return HandoverState(
       error: '',

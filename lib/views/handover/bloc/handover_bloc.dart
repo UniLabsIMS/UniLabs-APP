@@ -39,11 +39,13 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
         yield state.clone(error: "");
         yield state.clone(error: error);
         break;
+
       case ChangeHandoverStepEvent:
         HandoverProcessStep nextStep =
             (event as ChangeHandoverStepEvent).nextStep;
         yield state.clone(step: nextStep);
         break;
+
       case SearchStudentAndApprovedItemsEvent:
         yield state.clone(
           loading: true,
@@ -73,6 +75,24 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
           yield state.clone(loading: false, studentIDScanError: true);
         }
         break;
+
+      case SelectDisplayItemToScanItemsEvent:
+        ApprovedDisplayItem approvedDspItem =
+            (event as SelectDisplayItemToScanItemsEvent).approvedDisplayItem;
+        yield state.clone(
+          selectedApprovedDisplayItem: approvedDspItem,
+        );
+        break;
+
+      case ClearSelectedDisplayItemEvent:
+        yield state.clearSelectedDisplayItemState();
+        break;
+
+      case UpdateDueDateEvent:
+        String date = (event as UpdateDueDateEvent).dateString;
+        yield state.clone(dueDate: date);
+        break;
+
       case HandoverScannedItemEvent:
         yield state.clone(
             loading: true, itemScanError: false, itemScanSuccess: false);
@@ -143,26 +163,9 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
           );
         }
         break;
-      case UpdateDueDateEvent:
-        String date = (event as UpdateDueDateEvent).dateString;
-        yield state.clone(dueDate: date);
-        break;
+
       case ClearStateEvent:
         yield state.clearState();
-        break;
-      case SelectDisplayItemToScanItemsEvent:
-        ApprovedDisplayItem approvedDspItem =
-            (event as SelectDisplayItemToScanItemsEvent).approvedDisplayItem;
-        yield state.clone(
-          selectedApprovedDisplayItem: approvedDspItem,
-        );
-        break;
-      case ClearSelectedDisplayItemEvent:
-        state.clone(
-          selectedDisplayItemID: "",
-          selectedApprovedItemID: "",
-          selectedApprovedDisplayItem: null,
-        );
         break;
     }
   }

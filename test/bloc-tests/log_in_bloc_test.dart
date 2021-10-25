@@ -34,7 +34,7 @@ void main() {
     mockRootBloc = MockRootBloc();
   });
 
-  group('Root Bloc', () {
+  group('Login  Bloc', () {
     blocTest<LoginBloc, LoginState>(
       'when \'TogglePasswordVisiblityEvent\' the state field \'showPass\' should be set as true if its false.',
       build: () {

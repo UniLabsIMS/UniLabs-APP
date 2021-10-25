@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unilabs_app/api_endpoints.dart';
+import 'package:unilabs_app/classes/repository/user_repository.dart';
 import 'package:unilabs_app/root_bloc/root_bloc.dart';
 import 'package:unilabs_app/root_bloc/root_event.dart';
 
@@ -12,11 +12,14 @@ import 'home_event.dart';
 import 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final RootBloc rootBloc;
-  Dio dio = Dio();
-  HomeBloc(BuildContext context)
-      : this.rootBloc = BlocProvider.of<RootBloc>(context),
-        super(HomeState.initialState);
+  RootBloc rootBloc;
+  UserRepository userRepository;
+  HomeBloc(
+      BuildContext context, RootBloc rootBloc, UserRepository userRepository)
+      : super(HomeState.initialState) {
+    this.rootBloc = rootBloc;
+    this.userRepository = userRepository;
+  }
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
@@ -28,10 +31,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         break;
       case LogoutEvent:
         yield state.clone(loading: true, logoutError: false);
-        String token = "Token " + rootBloc.state.user.token;
-        dio.options.headers["Authorization"] = token;
         try {
-          await dio.post(APIEndpoints.kLogoutURL);
+          await userRepository.logOut(token: rootBloc.state.user.token);
           rootBloc.add(LogOutEvent());
         } on DioError {
           yield state.clone(loading: true, logoutError: true);

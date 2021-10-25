@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unilabs_app/classes/repository/user_repository.dart';
 import 'package:unilabs_app/common_widgets/dialog_body.dart';
 import 'package:unilabs_app/common_widgets/dialog_button.dart';
 import 'package:unilabs_app/common_widgets/error_dialog_title.dart';
@@ -16,7 +17,11 @@ class HomeProvider extends BlocProvider<HomeBloc> {
     Key key,
   }) : super(
           key: key,
-          create: (context) => HomeBloc(context),
+          create: (context) => HomeBloc(
+            context,
+            BlocProvider.of<RootBloc>(context),
+            UserRepository(),
+          ),
           child: HomeView(),
         );
 }
