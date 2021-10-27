@@ -1,5 +1,7 @@
 # UniLabs Mobile :test_tube:
 
+[![codecov](https://codecov.io/gh/UniLabsIMS/UniLabs-APP/branch/main/graph/badge.svg?token=53XKY1LT6A)](https://codecov.io/gh/UniLabsIMS/UniLabs-APP)
+
 This is the mobile application for UniLabs Inventory Management System
 
 
