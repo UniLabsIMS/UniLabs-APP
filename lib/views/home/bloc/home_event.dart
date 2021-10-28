@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 @immutable
-abstract class HomeEvent {}
+abstract class LoginEvent {}
 
-class ErrorEvent extends HomeEvent {
+class ErrorEvent extends LoginEvent {
   final String error;
 
   ErrorEvent(this.error);
 }
 
-class LogoutEvent extends HomeEvent {}
+class LogoutEvent extends LoginEvent {}
