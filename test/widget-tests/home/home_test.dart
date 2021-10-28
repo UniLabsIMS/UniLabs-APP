@@ -7,22 +7,21 @@ import 'package:unilabs_app/root_bloc/root_bloc.dart';
 import 'package:unilabs_app/root_bloc/root_event.dart';
 import 'package:unilabs_app/root_bloc/root_state.dart';
 import 'package:unilabs_app/views/home/bloc/home_bloc.dart';
-import 'package:unilabs_app/views/home/bloc/home_event.dart';
 import 'package:unilabs_app/views/home/bloc/home_state.dart';
+import 'package:unilabs_app/views/home/bloc/home_event.dart';
 import 'package:unilabs_app/views/home/components/menu_tile.dart';
 import 'package:unilabs_app/views/home/components/profile_card.dart';
 import 'package:unilabs_app/views/home/home.dart';
 
 import '../../bloc-tests/test_data/logged_in_root_state.dart';
 
-class MockHomeBloc extends MockBloc<LoginEvent, HomeState> implements HomeBloc {
-}
+class MockHomeBloc extends MockBloc<HomeEvent, HomeState> implements HomeBloc {}
 
 class MockRootBloc extends MockBloc<RootEvent, RootState> implements RootBloc {}
 
 class HomeStateFake extends Fake implements HomeState {}
 
-class HomeEventFake extends Fake implements LoginEvent {}
+class HomeEventFake extends Fake implements HomeEvent {}
 
 class RootStateFake extends Fake implements RootState {}
 
@@ -37,7 +36,7 @@ void main() {
       registerFallbackValue<RootState>(RootStateFake());
       registerFallbackValue<RootEvent>(RootEventFake());
       registerFallbackValue<HomeState>(HomeStateFake());
-      registerFallbackValue<LoginEvent>(HomeEventFake());
+      registerFallbackValue<HomeEvent>(HomeEventFake());
       mockHomeBloc = MockHomeBloc();
       mockRootBloc = MockRootBloc();
     });

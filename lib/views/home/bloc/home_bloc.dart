@@ -11,7 +11,7 @@ import 'package:unilabs_app/root_bloc/root_event.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
-class HomeBloc extends Bloc<LoginEvent, HomeState> {
+class HomeBloc extends Bloc<HomeEvent, HomeState> {
   RootBloc rootBloc;
   UserRepository userRepository;
   HomeBloc(
@@ -22,7 +22,7 @@ class HomeBloc extends Bloc<LoginEvent, HomeState> {
   }
 
   @override
-  Stream<HomeState> mapEventToState(LoginEvent event) async* {
+  Stream<HomeState> mapEventToState(HomeEvent event) async* {
     switch (event.runtimeType) {
       case ErrorEvent:
         final error = (event as ErrorEvent).error;
