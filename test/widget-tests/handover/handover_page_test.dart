@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:unilabs_app/classes/api/approved_display_item.dart';
 import 'package:unilabs_app/classes/api/student.dart';
-import 'package:unilabs_app/common_widgets/tap_to_scan_card.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_bloc.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_event.dart';
 import 'package:unilabs_app/views/handover/bloc/handover_state.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:unilabs_app/views/handover/components/student_and_item_details.dart';
+import 'package:unilabs_app/views/handover/handover_page.dart';
 import 'package:unilabs_app/views/handover/step_pages/intial_page.dart';
+import 'package:unilabs_app/views/handover/step_pages/item_scan_page.dart';
 
 class MockHandoverBloc extends MockBloc<HandoverEvent, HandoverState>
     implements HandoverBloc {}
@@ -19,10 +20,11 @@ class HandoverStateFake extends Fake implements HandoverState {}
 class HandoverEventFake extends Fake implements HandoverEvent {}
 
 void main() {
-  group('Handover - InitialPage', () {
+  group('Handover - HandoverPage', () {
     MockHandoverBloc mockHandoverBloc;
     Student student;
-
+    ApprovedDisplayItem approvedDisplayItemOne;
+    ApprovedDisplayItem approvedDisplayItemTwo;
     setUpAll(() {
       registerFallbackValue<HandoverState>(HandoverStateFake());
       registerFallbackValue<HandoverEvent>(HandoverEventFake());
@@ -39,14 +41,29 @@ void main() {
         departmentName: "CompSci",
         contactNo: "0777456345",
       );
+      approvedDisplayItemOne = new ApprovedDisplayItem(
+        id: "xxx",
+        displayItemName: "name",
+        displayItemImageURL: "",
+        displayItemId: "yyy",
+        displayItemDescription: "desc",
+        requestedItemCount: 4,
+      );
+      approvedDisplayItemTwo = new ApprovedDisplayItem(
+        id: "xxx2",
+        displayItemName: "name2",
+        displayItemImageURL: "",
+        displayItemId: "yyy2",
+        displayItemDescription: "desc2",
+        requestedItemCount: 5,
+      );
     });
-    testWidgets(
-        'InitialPage renders as expected when no student id is scanned yet',
+    testWidgets('HandoverPage renders as expected when step is InitialStep',
         (WidgetTester tester) async {
       when(() => mockHandoverBloc.state).thenReturn(
         HandoverState(
           error: "",
-          step: HandoverProcessStep.ItemScanStep,
+          step: HandoverProcessStep.InitialStep,
           loading: false,
           student: null,
           selectedApprovedDisplayItem: null,
@@ -61,10 +78,11 @@ void main() {
       );
 
       // find
-      final widget = InitialPage();
-      final widgetFinder = find.byType(InitialPage);
-      final scanCardFinder = find.byType(TapToScanCard, skipOffstage: false);
-      final titleFinder = find.text("Item Handover", skipOffstage: false);
+      final widget = HandoverPage();
+      final widgetFinder = find.byType(HandoverPage);
+      final childPageFinder = find.byType(InitialPage, skipOffstage: false);
+      final animationFinder =
+          find.byType(AnimatedSwitcher, skipOffstage: false);
 
       // test
       await tester.pumpWidget(
@@ -80,10 +98,11 @@ void main() {
 
       // expect
       expect(widgetFinder, findsOneWidget);
-      expect(scanCardFinder, findsOneWidget);
-      expect(titleFinder, findsOneWidget);
+      expect(childPageFinder, findsOneWidget);
+      expect(animationFinder, findsOneWidget);
     });
-    testWidgets('InitialPage renders as expected when a student id is scanned',
+
+    testWidgets('HandoverPage renders as expected when step is ItemScanStep',
         (WidgetTester tester) async {
       when(() => mockHandoverBloc.state).thenReturn(
         HandoverState(
@@ -91,8 +110,11 @@ void main() {
           step: HandoverProcessStep.ItemScanStep,
           loading: false,
           student: student,
-          selectedApprovedDisplayItem: null,
-          approvedDisplayItemsList: [],
+          selectedApprovedDisplayItem: approvedDisplayItemOne,
+          approvedDisplayItemsList: [
+            approvedDisplayItemOne,
+            approvedDisplayItemTwo
+          ],
           studentIDScanError: false,
           itemScanError: false,
           itemScanSuccess: false,
@@ -103,11 +125,11 @@ void main() {
       );
 
       // find
-      final widget = InitialPage();
-      final widgetFinder = find.byType(InitialPage);
-      final detailsFinder =
-          find.byType(StudentAndItemDetails, skipOffstage: false);
-      final titleFinder = find.text("Item Handover", skipOffstage: false);
+      final widget = HandoverPage();
+      final widgetFinder = find.byType(HandoverPage);
+      final childPageFinder = find.byType(ItemScanPage, skipOffstage: false);
+      final animationFinder =
+          find.byType(AnimatedSwitcher, skipOffstage: false);
 
       // test
       await tester.pumpWidget(
@@ -123,51 +145,8 @@ void main() {
 
       // expect
       expect(widgetFinder, findsOneWidget);
-      expect(detailsFinder, findsOneWidget);
-      expect(titleFinder, findsOneWidget);
-    });
-
-    testWidgets('InitialPage renders as expected when a loading is true',
-        (WidgetTester tester) async {
-      when(() => mockHandoverBloc.state).thenReturn(
-        HandoverState(
-          error: "",
-          step: HandoverProcessStep.ItemScanStep,
-          loading: true,
-          student: student,
-          selectedApprovedDisplayItem: null,
-          approvedDisplayItemsList: [],
-          studentIDScanError: false,
-          itemScanError: false,
-          itemScanSuccess: false,
-          clearAllApprovedSuccess: false,
-          clearAllApprovedError: false,
-          dueDate: "2021-10-20",
-        ),
-      );
-
-      // find
-      final widget = InitialPage();
-      final widgetFinder = find.byType(InitialPage);
-      final loadingFinder =
-          find.byType(CircularProgressIndicator, skipOffstage: false);
-      final titleFinder = find.text("Item Handover", skipOffstage: false);
-
-      // test
-      await tester.pumpWidget(
-        BlocProvider<HandoverBloc>(
-          create: (context) => mockHandoverBloc,
-          child: MaterialApp(
-            title: 'Widget Test',
-            home: widget,
-          ),
-        ),
-      );
-
-      // expect
-      expect(widgetFinder, findsOneWidget);
-      expect(loadingFinder, findsOneWidget);
-      expect(titleFinder, findsOneWidget);
+      expect(childPageFinder, findsOneWidget);
+      expect(animationFinder, findsOneWidget);
     });
   });
 }
