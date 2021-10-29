@@ -73,7 +73,7 @@ class ItemDetails extends StatelessWidget {
                               text: state.item.state ==
                                       ItemRepository.AvailableState
                                   ? "Mark Item as Damaged"
-                                  : "Mark Item available",
+                                  : "Mark Item Available",
                               onPressed: () {
                                 String newState = state.item.state ==
                                         ItemRepository.AvailableState
