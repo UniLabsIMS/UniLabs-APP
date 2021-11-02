@@ -60,18 +60,18 @@ class StudentDetailCard extends StatelessWidget {
                 Text(
                   firstName + ' ' + lastName,
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  studentID + ' - ' + department,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+                  child: Text(
+                    studentID + ' - ' + department,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ],

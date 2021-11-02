@@ -27,7 +27,7 @@ class StudentAndItemDetails extends StatelessWidget {
                   StudentDetailCard(
                     imgSrc: state.student.imageURL != null
                         ? state.student.imageURL
-                        : "",
+                        : Constants.kDefaultProfileImageURL,
                     firstName: state.student.firstName.isNotEmpty
                         ? state.student.firstName
                         : state.student.indexNumber,

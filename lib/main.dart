@@ -28,19 +28,21 @@ class UniLabsApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-          navigatorKey: _navigatorKey,
-          title: 'Uni Labs',
-          theme: buildThemeData(context),
-          initialRoute: '/',
-          routes: {
-            "/": (context) => SplashScreen(),
-            "/login": (context) => LoginProvider(),
-            "/home": (context) => HomeProvider(),
-            "/search": (context) => ItemSearchProvider(),
-            "/handover": (context) => HandoverProvider(),
-            "/temp-handover": (context) => TemporaryHandoverProvider(),
-            "/item-return": (context) => ItemReturnProvider(),
-          }),
+        navigatorKey: _navigatorKey,
+        title: 'Uni Labs',
+        theme: buildThemeData(context),
+        initialRoute: '/',
+        routes: {
+          "/": (context) => SplashScreen(),
+          "/login": (context) => LoginProvider(),
+          "/home": (context) => HomeProvider(),
+          "/search": (context) => ItemSearchProvider(),
+          "/handover": (context) => HandoverProvider(),
+          "/temp-handover": (context) => TemporaryHandoverProvider(),
+          "/item-return": (context) => ItemReturnProvider(),
+        },
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

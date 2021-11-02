@@ -21,4 +21,15 @@ abstract class Constants {
   // Default large screen sizes
   static final double kMaxButtonWidth = 700;
   static final double kMaxHomeDetailWidth = 1000;
+
+  //Images
+  static final String kDefaultProfileImageURL =
+      'https://img.favpng.com/22/17/15/user-computer-icons-anonymity-png-favpng-Ps1EmXsrUx17SLTQrTeDg1FN5.jpg';
+  static final String kSearchItemImage = "assets/images/search_item.jpg";
+  static final String kHandoverItemsImage = "assets/images/handover_items.jpg";
+  static final String kTemporaryHandoverImage =
+      "assets/images/temporary_handover.jfif";
+  static final String kReturnItemsImage = "assets/images/accept_items.jfif";
+  static final String kDefaultItemImageURL =
+      "https://media.istockphoto.com/vectors/laboratory-beakers-icon-chemical-experiment-in-flasks-hemistry-and-vector-id1165295631?k=20&m=1165295631&s=612x612&w=0&h=WA8ZWrwyKmGUGjoU77iHDl_P5vT4ewRaSVdlDQP9BS8=";
 }

@@ -36,6 +36,7 @@ class HomePage extends StatelessWidget {
               : Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    SizedBox(height: 5),
                     BlocBuilder<RootBloc, RootState>(
                       builder: (context, state) {
                         return ProfileCard(
@@ -53,10 +54,11 @@ class HomePage extends StatelessWidget {
                               : 'Lab Name',
                           imgSrc: state.user.imageURL != null
                               ? state.user.imageURL
-                              : '',
+                              : Constants.kDefaultProfileImageURL,
                         );
                       },
                     ),
+                    SizedBox(height: 20),
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -73,8 +75,7 @@ class HomePage extends StatelessWidget {
                               children: [
                                 MenuTile(
                                   title: 'Search Item',
-                                  image: AssetImage(
-                                      'assets/images/search_item.jpg'),
+                                  image: AssetImage(Constants.kSearchItemImage),
                                   onTap: () {
                                     Navigator.pushReplacementNamed(
                                         context, "/search");
@@ -82,8 +83,8 @@ class HomePage extends StatelessWidget {
                                 ),
                                 MenuTile(
                                   title: 'Handover Items',
-                                  image: AssetImage(
-                                      'assets/images/handover_items.jpg'),
+                                  image:
+                                      AssetImage(Constants.kHandoverItemsImage),
                                   onTap: () {
                                     Navigator.pushReplacementNamed(
                                         context, "/handover");
@@ -92,7 +93,7 @@ class HomePage extends StatelessWidget {
                                 MenuTile(
                                   title: 'Temporary Handover',
                                   image: AssetImage(
-                                      'assets/images/temporary_handover.jfif'),
+                                      Constants.kTemporaryHandoverImage),
                                   onTap: () {
                                     Navigator.pushReplacementNamed(
                                       context,
@@ -102,8 +103,8 @@ class HomePage extends StatelessWidget {
                                 ),
                                 MenuTile(
                                   title: 'Returning Items',
-                                  image: AssetImage(
-                                      'assets/images/accept_items.jfif'),
+                                  image:
+                                      AssetImage(Constants.kReturnItemsImage),
                                   onTap: () {
                                     Navigator.pushReplacementNamed(
                                       context,
@@ -118,7 +119,7 @@ class HomePage extends StatelessWidget {
                                 [
                                   Padding(
                                     padding: EdgeInsets.symmetric(
-                                      vertical: 30,
+                                      vertical: 50,
                                       horizontal: marginHorizontal - 20,
                                     ),
                                     child: TextButton(
