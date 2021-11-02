@@ -37,7 +37,7 @@ class ApprovedDisplayItemCard extends StatelessWidget {
           leading: NetworkAvatar(
             borderWidth: 1,
             radius: 25,
-            src: imgSrc,
+            src: imgSrc.isEmpty ? Constants.kDefaultItemImageURL : imgSrc,
             err: "Img",
           ),
           title: Text(

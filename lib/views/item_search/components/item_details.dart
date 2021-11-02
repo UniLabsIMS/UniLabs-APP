@@ -35,9 +35,10 @@ class ItemDetails extends StatelessWidget {
                         radius: 60,
                         src: state.item.parentDisplayItemImageURL.isNotEmpty
                             ? state.item.parentDisplayItemImageURL
-                            : "https://www.hallmarknameplate.com/wp-content/uploads/2018/12/AdobeStock_4381957.jpeg",
+                            : Constants.kDefaultItemImageURL,
                         err: "Img",
                       ),
+                      SizedBox(height: 10),
                       Text(
                         state.item.parentDisplayItemName.toUpperCase(),
                         style: TextStyle(
@@ -51,10 +52,10 @@ class ItemDetails extends StatelessWidget {
                           fontSize: 24,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       StateBubble(
                         stateName: state.item.state,
-                        color: Colors.pink[800],
+                        color: Colors.pink[600],
                       ),
                       SizedBox(height: 20),
                       Text(

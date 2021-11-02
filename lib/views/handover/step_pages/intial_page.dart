@@ -78,7 +78,7 @@ class InitialPage extends StatelessWidget {
               title: "Are You Sure?",
             ),
             content: AlertDialogBody(
-              content: "Do you want to exit and return to home page",
+              content: "Do you want to exit and return to the home page?",
             ),
             actions: <Widget>[
               DialogButton(
