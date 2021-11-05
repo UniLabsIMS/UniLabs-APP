@@ -26,8 +26,8 @@ jobs:
         with:
           flutter-version: '2.5.1'
       - run: flutter pub get
-#       - run: flutter test --coverage
-#       - name: Upload coverage to Codecov
-#         uses: codecov/codecov-action@v1
+      - run: flutter test --coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
       - run: flutter build apk --debug --split-per-abi
       
