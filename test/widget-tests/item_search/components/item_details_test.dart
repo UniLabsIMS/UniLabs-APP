@@ -187,9 +187,9 @@ void main() {
       expect(descTextFinder, findsOneWidget);
       expect(imageFinder, findsOneWidget);
       expect(iconButtonFinder, findsOneWidget);
-      expect(buttonFinder, findsOneWidget);
-      expect((tester.widget(buttonFinder) as CustomSmallButton).text,
-          "Mark Item Available");
+      expect(buttonFinder, findsNWidgets(2));
+      expect((tester.firstWidget(buttonFinder) as CustomSmallButton).text,
+          "Mark Item as Available");
       expect((tester.widget(iconButtonFinder) as CustomIconButton).text,
           "Scan Another");
     });

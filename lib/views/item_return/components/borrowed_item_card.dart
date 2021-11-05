@@ -42,7 +42,7 @@ class BorrowedItemCard extends StatelessWidget {
             style: TextStyle(fontSize: 16),
           ),
           trailing: Text(
-            state,
+            state.replaceAll("_", ". "),
             style: TextStyle(color: Constants.kSuccessColor),
           ),
         ),

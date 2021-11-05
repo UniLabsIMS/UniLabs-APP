@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unilabs_app/classes/repository/item_repository.dart';
 import 'package:unilabs_app/common_widgets/custom_button_icon.dart';
 import 'package:unilabs_app/common_widgets/custom_small_button.dart';
+import 'package:unilabs_app/common_widgets/dialog_body.dart';
+import 'package:unilabs_app/common_widgets/dialog_button.dart';
 import 'package:unilabs_app/common_widgets/network_avatar.dart';
+import 'package:unilabs_app/common_widgets/warning_dialog_title.dart';
 import 'package:unilabs_app/root_bloc/root_bloc.dart';
 import 'package:unilabs_app/root_bloc/root_state.dart';
 import 'package:unilabs_app/views/item_search/bloc/item_search_bloc.dart';
@@ -41,6 +44,7 @@ class ItemDetails extends StatelessWidget {
                       SizedBox(height: 10),
                       Text(
                         state.item.parentDisplayItemName.toUpperCase(),
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 32),
                       ),
@@ -74,7 +78,7 @@ class ItemDetails extends StatelessWidget {
                               text: state.item.state ==
                                       ItemRepository.AvailableState
                                   ? "Mark Item as Damaged"
-                                  : "Mark Item Available",
+                                  : "Mark Item as Available",
                               onPressed: () {
                                 String newState = state.item.state ==
                                         ItemRepository.AvailableState
@@ -85,12 +89,40 @@ class ItemDetails extends StatelessWidget {
                               },
                             )
                           : Container(),
-                      (state.item.state == ItemRepository.AvailableState
+                      (state.item.state == ItemRepository.AvailableState ||
+                              state.item.state == ItemRepository.DamagedState
                           ? CustomSmallButton(
                               color: Colors.red,
                               text: "Delete Item",
-                              onPressed: () {
-                                itemSearchBloc.add(DeleteItemEvent());
+                              onPressed: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) => new AlertDialog(
+                                    title: WarningDialogTitle(
+                                      title: "Are You Sure?",
+                                    ),
+                                    content: AlertDialogBody(
+                                      content:
+                                          "Do you want to delete the item permanently from the system? This action can not be reversed.",
+                                    ),
+                                    actions: <Widget>[
+                                      DialogButton(
+                                        color: Constants.kSuccessColor,
+                                        text: "No",
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                      ),
+                                      DialogButton(
+                                          color: Constants.kErrorColor,
+                                          text: "Yes",
+                                          onPressed: () {
+                                            Navigator.of(context).pop(true);
+                                            itemSearchBloc
+                                                .add(DeleteItemEvent());
+                                          }),
+                                    ],
+                                  ),
+                                );
                               },
                             )
                           : SizedBox(height: 40)),
