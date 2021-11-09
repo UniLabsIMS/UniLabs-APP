@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unilabs_app/classes/repository/user_repository.dart';
+import 'package:unilabs_app/constants.dart';
 import 'root_event.dart';
 import 'root_state.dart';
 
@@ -23,10 +24,10 @@ class RootBloc extends Bloc<RootEvent, RootState> {
       print('Token >>>>>>>>>>>>>>>>>>>>> $token');
       final user = await userRepository.getFromAPIWithToken(token);
       if (user != null) {
-        add(UpdateUserEvent(user));
         print('Logged In >>>>>>>>>>>>>>>>>>>>> ${user.id}');
         await Future.delayed(Duration(seconds: 1));
-        if (user.role == 'Lab_Assistant') {
+        if (user.role == Constants.kLabAssistantRole) {
+          add(UpdateUserEvent(user));
           add(ChangeLogInStateEvent(LoginStateType.LOGIN));
         } else {
           await Future.delayed(Duration(seconds: 3));

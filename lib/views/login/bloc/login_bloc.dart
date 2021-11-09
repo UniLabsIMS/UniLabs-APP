@@ -7,6 +7,7 @@ import 'package:unilabs_app/classes/repository/user_repository.dart';
 import 'package:unilabs_app/root_bloc/root_bloc.dart';
 import 'package:unilabs_app/root_bloc/root_event.dart';
 
+import '../../../constants.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
@@ -28,7 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield state.clone(error: "");
         yield state.clone(error: error);
         break;
-      case TogglePasswordVisiblityEvent:
+      case TogglePasswordVisibilityEvent:
         yield state.clone(showPass: !state.showPass);
         break;
 
@@ -38,7 +39,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final user = await userRepository.loginToWithEmailPassword(
             authDetails['email'], authDetails['password']);
         if (user != null) {
-          if (user.role == 'Lab_Assistant') {
+          if (user.role == Constants.kLabAssistantRole) {
             rootBloc.add(LogInAndSaveTokenEvent(user));
           } else {
             yield state.clone(loading: false, loginFailed: true);

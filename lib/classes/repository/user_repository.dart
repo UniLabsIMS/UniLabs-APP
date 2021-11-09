@@ -26,9 +26,7 @@ class UserRepository {
         contactNo: data["contact_number"],
         blocked: data["blocked"] == "true",
       );
-    } on DioError catch (e) {
-      print(e.toString());
-      print(e.response.data);
+    } catch (e) {
       return null;
     }
   }
@@ -56,8 +54,7 @@ class UserRepository {
         contactNo: data["contact_number"],
         blocked: data["blocked"] == "true",
       );
-    } on DioError catch (e) {
-      print(e);
+    } catch (e) {
       return null;
     }
   }

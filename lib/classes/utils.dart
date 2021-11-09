@@ -4,10 +4,8 @@ class Util {
   static DateTime convertToDate(String input) {
     try {
       DateTime d = new DateFormat('yyyy-MM-dd').parseStrict(input);
-      print(d);
       return d;
     } catch (e) {
-      print(e);
       return null;
     }
   }

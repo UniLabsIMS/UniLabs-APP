@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unilabs_app/classes/api/student.dart';
@@ -52,7 +51,7 @@ class TemporaryHandoverBloc
             studentSearchError: false,
             student: student,
           );
-        } on DioError {
+        } catch (e) {
           yield state.clone(
             loading: false,
             studentSearchSuccess: false,
