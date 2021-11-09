@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unilabs_app/classes/repository/user_repository.dart';
@@ -34,7 +33,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         try {
           await userRepository.logOut(token: rootBloc.state.user.token);
           rootBloc.add(LogOutEvent());
-        } on DioError {
+        } catch (e) {
           yield state.clone(loading: true, logoutError: true);
         }
         break;

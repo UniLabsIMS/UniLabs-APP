@@ -174,7 +174,7 @@ class LoginPage extends StatelessWidget {
               hintText: "Password",
               hintStyle: stylesheet._hintText,
               suffixIcon: GestureDetector(
-                onTap: () => bloc.add(TogglePasswordVisiblityEvent()),
+                onTap: () => bloc.add(TogglePasswordVisibilityEvent()),
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 2, right: 4),
                   child: Icon(

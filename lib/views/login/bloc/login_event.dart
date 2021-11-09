@@ -9,7 +9,7 @@ class ErrorEvent extends LoginEvent {
   ErrorEvent(this.error);
 }
 
-class TogglePasswordVisiblityEvent extends LoginEvent {}
+class TogglePasswordVisibilityEvent extends LoginEvent {}
 
 class SubmitEvent extends LoginEvent {
   final Map<String, String> auth;

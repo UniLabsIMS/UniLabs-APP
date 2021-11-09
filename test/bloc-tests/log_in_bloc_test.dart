@@ -42,21 +42,21 @@ void main() {
             LoginBloc(mockContext, mockRootBloc, mockUserRepository);
         return bloc;
       },
-      act: (bloc) => bloc.add(TogglePasswordVisiblityEvent()),
+      act: (bloc) => bloc.add(TogglePasswordVisibilityEvent()),
       expect: () => [
         isA<LoginState>()
             .having((state) => state.showPass, 'showPass', equals(true))
       ],
     );
     blocTest<LoginBloc, LoginState>(
-      'when \'TogglePasswordVisiblityEvent\' the state field \'showPass\' should be set as fasle if its true.',
+      'when \'TogglePasswordVisibilityEvent\' the state field \'showPass\' should be set as fasle if its true.',
       build: () {
         LoginBloc bloc =
             LoginBloc(mockContext, mockRootBloc, mockUserRepository);
         bloc.emit(bloc.state.clone(showPass: true));
         return bloc;
       },
-      act: (bloc) => bloc.add(TogglePasswordVisiblityEvent()),
+      act: (bloc) => bloc.add(TogglePasswordVisibilityEvent()),
       expect: () => [
         isA<LoginState>()
             .having((state) => state.showPass, 'showPass', equals(false))

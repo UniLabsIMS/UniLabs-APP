@@ -18,6 +18,9 @@ abstract class Constants {
 
   static final String kBarcodeScannerColor = "#009688";
 
+  //user role
+  static final String kLabAssistantRole = 'Lab_Assistant';
+
   // Default large screen sizes
   static final double kMaxButtonWidth = 700;
   static final double kMaxHomeDetailWidth = 1000;
